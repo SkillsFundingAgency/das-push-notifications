@@ -349,3 +349,4 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 /src/SFA.DAS.PushNotifications.Functions/SFA.DAS.PushNotifications.Functions/Properties/launchSettings.json
+/src/SFA.DAS.PushNotifications.Functions/SFA.DAS.PushNotifications.Functions/Properties/serviceDependencies.local.json
