@@ -6,7 +6,7 @@ using SFA.DAS.PushNotifications.Functions.Handlers;
 using SFA.DAS.PushNotifications.Messages.Commands;
 using SFA.DAS.PushNotifications.Services;
 
-namespace SFA.DAS.PushNotifications.Functions.UnitTests.EventHandlers
+namespace SFA.DAS.PushNotifications.Functions.UnitTests.CommandHandlers
 {
     [TestFixture]
     public class RemoveWebPushSubscriptionCommandHandlerTests

@@ -13,7 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.PushNotifications.M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.PushNotifications.Functions.UnitTests", "SFA.DAS.PushNotifications.Functions.UnitTests\SFA.DAS.PushNotifications.Functions.UnitTests.csproj", "{A0EE0266-6424-4945-B50D-214081D1EC97}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.PushNotifications.Data.UnitTests", "SFA.DAS.PushNotifications.Data.UnitTests\SFA.DAS.PushNotifications.Data.UnitTests.csproj", "{735C735B-70E8-4968-8D00-EE7E43A8E1D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.PushNotifications.Data.UnitTests", "SFA.DAS.PushNotifications.Data.UnitTests\SFA.DAS.PushNotifications.Data.UnitTests.csproj", "{735C735B-70E8-4968-8D00-EE7E43A8E1D8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{295191FD-3004-450A-806E-F34C71473CE0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.PushNotifications.Functions.TestHarness", "SFA.DAS.PushNotifications.Functions.TestHarness\SFA.DAS.PushNotifications.Functions.TestHarness.csproj", "{690F47C8-D289-4ACE-9EF6-11C48CBDD328}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,9 +51,18 @@ Global
 		{735C735B-70E8-4968-8D00-EE7E43A8E1D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{735C735B-70E8-4968-8D00-EE7E43A8E1D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{735C735B-70E8-4968-8D00-EE7E43A8E1D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{690F47C8-D289-4ACE-9EF6-11C48CBDD328}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{690F47C8-D289-4ACE-9EF6-11C48CBDD328}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{690F47C8-D289-4ACE-9EF6-11C48CBDD328}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{690F47C8-D289-4ACE-9EF6-11C48CBDD328}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A0EE0266-6424-4945-B50D-214081D1EC97} = {295191FD-3004-450A-806E-F34C71473CE0}
+		{735C735B-70E8-4968-8D00-EE7E43A8E1D8} = {295191FD-3004-450A-806E-F34C71473CE0}
+		{690F47C8-D289-4ACE-9EF6-11C48CBDD328} = {295191FD-3004-450A-806E-F34C71473CE0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {06F36C9A-CE86-4655-99F1-C4070A217A14}
