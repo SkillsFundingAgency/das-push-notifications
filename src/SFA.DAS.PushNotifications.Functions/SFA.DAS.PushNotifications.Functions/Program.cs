@@ -7,6 +7,8 @@ using SFA.DAS.PushNotifications.Data.Extensions;
 using SFA.DAS.PushNotifications.Data.Repositories;
 using SFA.DAS.PushNotifications.Functions.StartupExtensions;
 using SFA.DAS.PushNotifications.Services;
+using SFA.DAS.PushNotifications.Functions.Configuration;
+using Microsoft.Extensions.Configuration;
 
 [assembly: NServiceBusTriggerFunction("SFA.DAS.PushNotifications.Functions")]
 
@@ -19,7 +21,7 @@ var host = new HostBuilder()
     {
         builder.BuildAppConfiguration(hostBuilderContext.Configuration);
     })
-.ConfigureServices((config, services) =>
+.ConfigureServices((context, services) =>
 {
     services.AddLogging(builder =>
     {
@@ -30,7 +32,16 @@ var host = new HostBuilder()
     .ConfigureFunctionsApplicationInsights()
     .AddTransient<IPushNotificationsService, PushNotificationsService>()
     .AddTransient<IApplicationClientRepository, ApplicationClientRepository>()
-    .AddPushNotificationsDataContext(config.Configuration);
+    .AddPushNotificationsDataContext(context.Configuration);
+
+    var configuration = context.Configuration;
+    var functionsConfig = configuration.GetSection("SFA.DAS.PushNotifications.Functions").Get<PushNotificationsFunctions>();
+    
+    if (functionsConfig != null)
+    {
+    Environment.SetEnvironmentVariable("AzureWebJobsServiceBus", functionsConfig.NServiceBusConnectionString);
+    Environment.SetEnvironmentVariable("NSERVICEBUS_LICENSE", functionsConfig.NServiceBusLicense);
+    }
 })
     .UseNServiceBus((config, endpointConfiguration) =>
     {

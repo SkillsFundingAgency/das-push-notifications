@@ -23,7 +23,7 @@ public static class AddPushNotificationsDataContextExtension
 
     public static IServiceCollection AddPushNotificationsDataContext(this IServiceCollection services, IConfiguration configuration)
     {
-        var sqlConnectionString = configuration["ConnectionStrings:SqlConnectionString"]!;
+        var sqlConnectionString = configuration["SFA.DAS.PushNotifications.Functions:DatabaseConnectionString"]!;
         var environmentName = configuration["EnvironmentName"]!;
 
         services.AddDbContext<PushNotificationsDataContext>((serviceProvider, options) =>
