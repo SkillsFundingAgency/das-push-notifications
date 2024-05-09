@@ -1,5 +1,8 @@
-﻿namespace SFA.DAS.PushNotifications.Data.UnitTests.DatabaseMock
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace SFA.DAS.PushNotifications.Data.UnitTests.DatabaseMock
 {
+    [ExcludeFromCodeCoverage]
     public class InMemoryDbAsyncEnumerator<T> : IAsyncEnumerator<T>
     {
         private readonly IEnumerator<T> innerEnumerator;

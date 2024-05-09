@@ -39,11 +39,4 @@ public class PushNotificationsService : IPushNotificationsService
         _logger.LogInformation($"Unsubscribing to push notifications for {apprenticeAppRemoveSubscription.Endpoint}");
         await _applicationClientRepository.RemoveWebPushNotificationSubscription(apprenticeAppRemoveSubscription, cancellationToken);
     }
-
-    public async Task DeleteAppSubscription(ApplicationClient apprenticeAppDeleteSubscription)
-    {
-        CancellationToken cancellationToken = CancellationToken.None;
-        _logger.LogInformation($"Deleted application client for {apprenticeAppDeleteSubscription.Endpoint}");
-        await _applicationClientRepository.DeleteWebPushNotificationSubscription(apprenticeAppDeleteSubscription, cancellationToken);
-    }
 }

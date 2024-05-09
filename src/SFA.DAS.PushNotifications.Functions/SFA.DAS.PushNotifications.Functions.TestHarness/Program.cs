@@ -8,7 +8,7 @@ namespace SFA.DAS.PushNotifications.Functions.TestHarness;
 
     internal class Program
 {
-    private const string EndpointName = "SFA.DAS.PushNotifications.Functions";
+    private const string EndpointName = "SFA.DAS.PushNotifications";
     private const string ConfigName = "SFA.DAS.PushNotifications.Functions";
 
     public static async Task Main()

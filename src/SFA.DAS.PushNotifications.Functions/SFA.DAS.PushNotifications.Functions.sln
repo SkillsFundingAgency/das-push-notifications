@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.PushNotifications.D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{295191FD-3004-450A-806E-F34C71473CE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.PushNotifications.Functions.TestHarness", "SFA.DAS.PushNotifications.Functions.TestHarness\SFA.DAS.PushNotifications.Functions.TestHarness.csproj", "{690F47C8-D289-4ACE-9EF6-11C48CBDD328}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.PushNotifications.Functions.TestHarness", "SFA.DAS.PushNotifications.Functions.TestHarness\SFA.DAS.PushNotifications.Functions.TestHarness.csproj", "{690F47C8-D289-4ACE-9EF6-11C48CBDD328}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

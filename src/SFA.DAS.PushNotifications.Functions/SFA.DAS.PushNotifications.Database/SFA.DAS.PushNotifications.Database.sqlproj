@@ -57,10 +57,16 @@
   <ItemGroup>
     <Folder Include="Properties" />
     <Folder Include="Tables" />
+    <Folder Include="PostDeployment" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="Tables\Application.sql" />
+    <Build Include="Tables\Applications.sql" />
     <Build Include="Tables\ApplicationClients.sql" />
     <Build Include="Tables\ClientNotification.sql" />
+    <Build Include="Tables\ClientPushStatus.sql" />
+    <Build Include="Tables\PushProtocol.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="PostDeployment\AddReferenceData.sql" />
   </ItemGroup>
 </Project>

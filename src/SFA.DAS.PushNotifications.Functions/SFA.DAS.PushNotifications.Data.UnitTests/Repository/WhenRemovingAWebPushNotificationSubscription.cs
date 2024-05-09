@@ -5,27 +5,21 @@ using SFA.DAS.PushNotifications.Data.Entities;
 using SFA.DAS.PushNotifications.Data.Repositories;
 using SFA.DAS.PushNotifications.Data.UnitTests.DatabaseMock;
 using SFA.DAS.Testing.AutoFixture;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static SFA.DAS.PushNotifications.Data.Entities.ApplicationClientStatusEnum;
 
 namespace SFA.DAS.PushNotifications.Data.UnitTests.Repository
 {
     [TestFixture]
-    public  class WhenRemovingAWebPushNotificationSubscription
+    public class WhenRemovingAWebPushNotificationSubscription
     {
         [Test, RecursiveMoqAutoData]
-        public async Task Then_ApplicationClientStatus_IsUpdated(
+        public async Task The_ApplicationClient_IsUpdated_IfAlreadyExists(
              List<ApplicationClient> applicationClients,
-            [Frozen] Mock<IPushNotificationsDataContext> mockContext,
-            ApplicationClientRepository repository,
-            ApplicationClient applicationClient)
+           [Frozen] Mock<IPushNotificationsDataContext> mockContext,
+           ApplicationClientRepository repository)
         {
-            applicationClient.Status = (int)ApplicationClientStatus.Inactive;
-
+            ApplicationClient applicationClient = applicationClients[0];
+            applicationClient.Status = (int)ApplicationClientStatus.Active;
             mockContext
                 .Setup(context => context.ApplicationClients)
                 .ReturnsDbSet(applicationClients);
@@ -33,10 +27,8 @@ namespace SFA.DAS.PushNotifications.Data.UnitTests.Repository
             CancellationToken cancellationToken = CancellationToken.None;
             await repository.RemoveWebPushNotificationSubscription(applicationClient, cancellationToken);
 
-            mockContext.Verify(context => context.SaveChangesAsync(cancellationToken), Times.Once());
-            applicationClient.Status.Should().Be((int)ApplicationClientStatus.Inactive);
-
-
+            mockContext.Verify(context => context.SaveChangesAsync(cancellationToken), Times.Once);
+            applicationClient.Status.Should().Be((int)ApplicationClientStatus.Unsubscribed);
         }
     }
 }

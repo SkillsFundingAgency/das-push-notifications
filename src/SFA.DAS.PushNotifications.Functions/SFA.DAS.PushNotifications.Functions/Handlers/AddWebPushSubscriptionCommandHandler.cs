@@ -9,7 +9,6 @@ namespace SFA.DAS.PushNotifications.Functions.Handlers
     {
         private readonly IPushNotificationsService _pushNotificationsService;
         private readonly ILogger<AddWebPushSubscriptionCommandHandler> _logger;
-        private const int ApprenticeAppApplicationId = 1;
 
         public AddWebPushSubscriptionCommandHandler(IPushNotificationsService pushNotificationsService, ILogger<AddWebPushSubscriptionCommandHandler> logger)
         {
@@ -18,13 +17,13 @@ namespace SFA.DAS.PushNotifications.Functions.Handlers
         }
         public async Task Handle(AddWebPushSubscriptionCommand message, IMessageHandlerContext context)
         {
-            _logger.LogInformation($"Handling {nameof(AddWebPushSubscriptionCommand)} for {message.Endpoint}");
+            _logger.LogInformation($"Handling AddWebPushSubscriptionCommand for {message.Endpoint}");
 
             try
+
             {
                 var applicationClient = new ApplicationClient
                 {
-                    ApplicationId = ApprenticeAppApplicationId,
                     UserAccountId = message.ApprenticeId,
                     Endpoint = message.Endpoint,
                     SubscriptionPublicKey = message.PublicKey,

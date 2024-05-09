@@ -8,7 +8,6 @@ namespace SFA.DAS.PushNotifications.Data
     public class PushNotificationsDataContext : DbContext, IPushNotificationsDataContext
     {
         public PushNotificationsDataContext(DbContextOptions<PushNotificationsDataContext> options) : base(options) { }
-
         public DbSet<ApplicationClient> ApplicationClients => Set<ApplicationClient>();
        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -16,6 +15,5 @@ namespace SFA.DAS.PushNotifications.Data
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(PushNotificationsDataContext).Assembly);
         }
-
     }
 }

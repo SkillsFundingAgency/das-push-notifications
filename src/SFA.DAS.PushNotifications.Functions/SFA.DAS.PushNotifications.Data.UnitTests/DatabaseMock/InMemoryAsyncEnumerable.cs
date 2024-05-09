@@ -1,7 +1,9 @@
-﻿using System.Linq.Expressions;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq.Expressions;
 
 namespace SFA.DAS.PushNotifications.Data.UnitTests.DatabaseMock
 {
+    [ExcludeFromCodeCoverage]
     public class InMemoryAsyncEnumerable<T> : EnumerableQuery<T>, IAsyncEnumerable<T>, IQueryable<T>
     {
         public InMemoryAsyncEnumerable(IEnumerable<T> enumerable)

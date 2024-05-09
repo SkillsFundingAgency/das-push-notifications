@@ -29,7 +29,6 @@ namespace SFA.DAS.PushNotifications.Functions.UnitTests.CommandHandlers
         {
             await _handler.Handle(_event, Mock.Of<IMessageHandlerContext>());
             _service.Verify(x => x.AddWebPushNotificationSubscription(It.Is<ApplicationClient>(s =>
-            s.ApplicationId == 1 &&
             s.UserAccountId == _event.ApprenticeId &&
             s.Endpoint == _event.Endpoint &&
             s.SubscriptionPublicKey == _event.PublicKey &&

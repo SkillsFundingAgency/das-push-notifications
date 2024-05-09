@@ -10,9 +10,9 @@ using SFA.DAS.PushNotifications.Services;
 using SFA.DAS.PushNotifications.Functions.Configuration;
 using Microsoft.Extensions.Configuration;
 
-[assembly: NServiceBusTriggerFunction("SFA.DAS.PushNotifications.Functions")]
+[assembly: NServiceBusTriggerFunction("SFA.DAS.PushNotifications")]
 
-const string EndpointName = "SFA.DAS.PushNotifications.Functions";
+const string EndpointName = "SFA.DAS.PushNotifications";
 const string ErrorEndpointName = $"{EndpointName}-error";
 
 var host = new HostBuilder()

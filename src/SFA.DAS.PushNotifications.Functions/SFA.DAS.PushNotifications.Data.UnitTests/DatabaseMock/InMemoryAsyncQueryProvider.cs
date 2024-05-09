@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore.Query;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 
 namespace SFA.DAS.PushNotifications.Data.UnitTests.DatabaseMock
 {
+    [ExcludeFromCodeCoverage]
     public class InMemoryAsyncQueryProvider<TEntity> : IAsyncQueryProvider
     {
         private readonly IQueryProvider innerQueryProvider;

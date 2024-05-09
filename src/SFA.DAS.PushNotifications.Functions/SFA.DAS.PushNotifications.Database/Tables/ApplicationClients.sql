@@ -11,6 +11,9 @@
     [DateCreated] DATETIME NOT NULL, 
     [ExpiryDate] DATETIME NULL, 
     [ApplicationId]INT NOT NULL,
-    CONSTRAINT [FK_ApplicationClient_ToTable] FOREIGN KEY ([ApplicationId]) REFERENCES [Application]([Id]),
+    [LastUpdatedOn] DATETIME NULL, 
+    CONSTRAINT [FK_ApplicationClient_ToApplication] FOREIGN KEY ([ApplicationId]) REFERENCES [Applications]([Id]),
+    CONSTRAINT [FK_ApplicationClient_ToClientPushStatus] FOREIGN KEY ([Status]) REFERENCES [ClientPushStatus]([Id]),
+    CONSTRAINT [FK_ApplicationClient_ToPushProtocol] FOREIGN KEY ([PushProtocol]) REFERENCES [PushProtocol]([Id]),
     CONSTRAINT [UK_ApplicationClient_EndPoint] UNIQUE NONCLUSTERED ([EndPoint] ASC)
 )

@@ -13,5 +13,6 @@
         public string? Handle { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime? ExpiryDate { get; set; }
+        public DateTime? LastUpdatedOn { get; set; }
     }
 }
