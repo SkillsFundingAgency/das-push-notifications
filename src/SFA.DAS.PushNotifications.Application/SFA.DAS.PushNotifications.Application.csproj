@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.PushNotifications.Data\SFA.DAS.PushNotifications.Data.csproj" />
+    <ProjectReference Include="..\SFA.DAS.PushNotifications.Messages\SFA.DAS.PushNotifications.Messages.csproj" />
+    <ProjectReference Include="..\SFA.DAS.PushNotifications.Model\SFA.DAS.PushNotifications.Model.csproj" />
+  </ItemGroup>
+
+</Project>
