@@ -25,6 +25,5 @@ namespace SFA.DAS.PushNotifications.Application.UnitTests.Services
             await service.RemoveWebPushNotificationSubscription(message);
             Assert.That(service, Is.Not.Null);
         }
-
     }
 }
