@@ -14,6 +14,9 @@
         "sharedEnvResourceGroup": {
             "type": "string"
         },
+        "sharedServiceBusName": {
+            "type": "string"
+        },
         "configurationStorageConnectionString": {
             "type": "securestring"
         },
@@ -54,6 +57,21 @@
         "appServicePlanSize": {
             "type": "string",
             "defaultValue": "1"
+        },
+        "sharedSQLServerName": {
+            "type": "string"
+        },
+        "elasticPoolName": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "databaseSkuName": {
+            "type": "string",
+            "defaultValue": "S0"
+        },
+        "databaseTier": {
+            "type": "string",
+            "defaultValue": "Standard"
         },
         "logAnalyticsSubscriptionId": {
             "type": "string",
