@@ -22,8 +22,7 @@ namespace SFA.DAS.PushNotifications.Application.UnitTests.Services
            PushNotificationsService service,
            RemoveWebPushSubscriptionCommand message)
         {
-            await service.RemoveWebPushNotificationSubscription(message);
-            Assert.That(service, Is.Not.Null);
+            Assert.DoesNotThrowAsync(async () => await service.RemoveWebPushNotificationSubscription(message));
         }
     }
 }

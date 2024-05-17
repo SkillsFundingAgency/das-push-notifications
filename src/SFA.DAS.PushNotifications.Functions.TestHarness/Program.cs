@@ -1,16 +1,17 @@
 ﻿using Microsoft.Extensions.Configuration;
+using NServiceBus.Logging;
+using NServiceBus.Routing.MessageDrivenSubscriptions;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.PushNotifications.Functions.Configuration;
-using SFA.DAS.PushNotifications.Functions.TestMessages;
 using SFA.DAS.PushNotifications.Messages.Commands;
-using System.Net;
 
 namespace SFA.DAS.PushNotifications.Functions.TestHarness;
 
-    internal class Program
+internal class Program
 {
     private const string EndpointName = "SFA.DAS.PushNotifications";
     private const string ConfigName = "SFA.DAS.PushNotifications.Functions";
+    
 
     public static async Task Main()
     {
@@ -34,16 +35,63 @@ namespace SFA.DAS.PushNotifications.Functions.TestHarness;
                     Directory.GetCurrentDirectory()
                         .Substring(0, Directory.GetCurrentDirectory().IndexOf("src")),
                     @"src\.learningtransport"));
+            var routing = transport.Routing();
 
-            transport.Routing().RouteToEndpoint(typeof(AddWebPushSubscriptionCommand), "SFA.DAS.PushNotifications.AddWebPushSubscription");
-            transport.Routing().RouteToEndpoint(typeof(RemoveWebPushSubscriptionCommand), "SFA.DAS.PushNotifications.RemoveWebPushSubscription");
+            routing.RouteToEndpoint(typeof(AddWebPushSubscriptionCommand), "SFA.DAS.PushNotifications.AddWebPushSubscription");
+            routing.RouteToEndpoint(typeof(RemoveWebPushSubscriptionCommand), "SFA.DAS.PushNotifications.RemoveWebPushSubscription");
 
         }
         var endpointInstance = await Endpoint.Start(endpointConfiguration);
 
-        var testHarness = new AddTestMessages(endpointInstance);
+        await AddMessages(endpointInstance);
 
-        await testHarness.Run();
         await endpointInstance.Stop();
-    } 
+    }
+
+    static ILog log = LogManager.GetLogger<Program>();
+    public static async Task AddMessages(IEndpointInstance endpointInstance)
+    {
+
+        while (true)
+        {
+            log.Info("Press 'A' to add test messages, or 'Q' to quit.");
+            var key = Console.ReadKey();
+            Console.WriteLine();
+
+            switch (key.Key)
+            {
+                case ConsoleKey.A:
+                    var testAdd1 = new AddWebPushSubscriptionCommand()
+                    {
+                        ApprenticeId = Guid.NewGuid(),
+                        Endpoint = "a",
+                        PublicKey = "b",
+                        AuthenticationSecret = "c"
+                    };
+                    log.Info($"Adding AddSubscription command, ApprenticeId = {testAdd1.ApprenticeId}");
+                    await endpointInstance.Send(testAdd1);
+
+                    var testAdd2 = new AddWebPushSubscriptionCommand()
+                    {
+                        ApprenticeId = Guid.NewGuid(),
+                        Endpoint = "x",
+                        PublicKey = "b",
+                        AuthenticationSecret = "c"
+                    };
+                    log.Info($"Adding AddSubscription command, ApprenticeId = {testAdd2.ApprenticeId}");
+                    await endpointInstance.Send(testAdd2);
+                    break;
+
+                case ConsoleKey.Q:
+                    return;
+
+                default:
+                    log.Info("Unknown input. Please try again.");
+                    break;
+            }
+        }
+
+    }
+
 }
+

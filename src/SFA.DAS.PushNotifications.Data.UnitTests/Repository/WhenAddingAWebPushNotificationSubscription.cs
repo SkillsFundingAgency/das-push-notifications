@@ -9,8 +9,6 @@ using ApplicationClient = SFA.DAS.PushNotifications.Model.Entities.ApplicationCl
 
 namespace SFA.DAS.PushNotifications.Data.UnitTests.Repository
 {
-
-
     [TestFixture]
     public class WhenAddingAWebPushNotificationSubscription
     {
@@ -33,22 +31,35 @@ namespace SFA.DAS.PushNotifications.Data.UnitTests.Repository
         }
 
         [Test, RecursiveMoqAutoData]
-        public async Task The_ApplicationClient_IsUpdated_IfAlreadyExists(
-              List<ApplicationClient> applicationClients,
+        public async Task The_ApplicationClient_IsReplaced_IfAlreadyExists(
             [Frozen] Mock<IPushNotificationsDataContext> mockContext,
             ApplicationClientRepository repository)
         {
-            ApplicationClient applicationClient = applicationClients[0];
-            applicationClient.Status = (int)ApplicationClientStatus.Inactive;
+            List<ApplicationClient> applicationClients = new();
+            ApplicationClient applicationClient = new()
+            {
+                Id = 1,
+                Endpoint = "testendpoint",
+                SubscriptionAuthenticationSecret = "testsecret",
+                SubscriptionPublicKey = "testkey"
+            };
             mockContext
-                .Setup(context => context.ApplicationClients)
-                .ReturnsDbSet(applicationClients);
+                  .Setup(context => context.ApplicationClients)
+                  .ReturnsDbSet(applicationClients);
+            applicationClients.Add(applicationClient);
 
+            ApplicationClient applicationClient2 = new()
+            {
+                Id = 2,
+                Endpoint = "testendpoint",
+                SubscriptionAuthenticationSecret = "testsecret",
+                SubscriptionPublicKey = "testkey"
+            };
             CancellationToken cancellationToken = CancellationToken.None;
-            await repository.AddWebPushNotificationSubscription(applicationClient, cancellationToken);
+            await repository.AddWebPushNotificationSubscription(applicationClient2, cancellationToken);
 
-            mockContext.Verify(context => context.SaveChangesAsync(cancellationToken), Times.Once);
-            applicationClient.Status.Should().Be((int)ApplicationClientStatus.Active);
+            applicationClient2.Status.Should().Be((int)ApplicationClientStatus.Active);
+            applicationClients.Count.Should().Be(1);
         }
     }
 }

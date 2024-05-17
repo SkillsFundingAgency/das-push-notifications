@@ -9,6 +9,7 @@ using static SFA.DAS.PushNotifications.Model.Entities.ApplicationClientStatusEnu
 
 namespace SFA.DAS.PushNotifications.Data.UnitTests.Repository
 {
+
     [TestFixture]
     public class WhenRemovingAWebPushNotificationSubscription
     {
@@ -29,6 +30,28 @@ namespace SFA.DAS.PushNotifications.Data.UnitTests.Repository
 
             mockContext.Verify(context => context.SaveChangesAsync(cancellationToken), Times.Once);
             applicationClient.Status.Should().Be((int)ApplicationClientStatus.Unsubscribed);
+        }
+
+        [Test, RecursiveMoqAutoData]
+        public async Task Then_NothingHappens_IfEndpointNotInDb(
+          [Frozen] Mock<IPushNotificationsDataContext> mockContext,
+          ApplicationClientRepository repository)
+        {
+            List<ApplicationClient> applicationClients = new();
+            mockContext
+                .Setup(context => context.ApplicationClients)
+                .ReturnsDbSet(applicationClients);
+
+            ApplicationClient applicationClient = new()
+            {
+                Id = 1,
+                Endpoint = "testendpoint",
+                SubscriptionAuthenticationSecret = "testsecret",
+                SubscriptionPublicKey = "testkey"
+            };
+            CancellationToken cancellationToken = CancellationToken.None;
+            await repository.RemoveWebPushNotificationSubscription(applicationClient, cancellationToken);
+            applicationClients.Count.Should().Be(0);
         }
     }
 }

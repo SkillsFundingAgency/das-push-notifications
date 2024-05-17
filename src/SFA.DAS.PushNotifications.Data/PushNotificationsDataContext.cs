@@ -13,6 +13,9 @@ namespace SFA.DAS.PushNotifications.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<ApplicationClient>()
+           .HasIndex(e => e.Endpoint)
+           .IsUnique();
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(PushNotificationsDataContext).Assembly);
         }
     }

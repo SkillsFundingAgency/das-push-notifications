@@ -21,20 +21,19 @@ public class ApplicationClientRepository : IApplicationClientRepository
 
     public async Task<int> AddWebPushNotificationSubscription(ApplicationClient applicationClient, CancellationToken cancellationToken)
     {
-        var appClient = _context.ApplicationClients.FirstOrDefault(x => x.Endpoint == applicationClient.Endpoint);
-        if (appClient != null)
-        {
-            appClient.Status = (int)ApplicationClientStatus.Active;
-            appClient.LastUpdatedOn = DateTime.UtcNow;
-            _context.ApplicationClients.Update(appClient);
+        var appClients = _context.ApplicationClients.Where(x => x.Endpoint == applicationClient.Endpoint);
+        if(appClients.Any()) { 
+            foreach(var appClient in appClients)
+            {
+                _context.ApplicationClients.Remove(appClient);
+            }
         }
-        else
-        {
-            applicationClient.ApplicationId = (int)Application.ApprenticeApp;
-            applicationClient.DateCreated = DateTime.UtcNow;
-            applicationClient.Status = (int)ApplicationClientStatus.Active;
-            _context.ApplicationClients.Add(applicationClient);
-        }
+        
+        applicationClient.ApplicationId = (int)Application.ApprenticeApp;
+        applicationClient.DateCreated = DateTime.UtcNow;
+        applicationClient.Status = (int)ApplicationClientStatus.Active;
+        _context.ApplicationClients.Add(applicationClient);
+        
         await _context.SaveChangesAsync(cancellationToken);
         return applicationClient.Id;
     }

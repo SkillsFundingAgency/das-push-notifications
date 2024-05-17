@@ -1,14 +1,14 @@
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging.ApplicationInsights;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.ApplicationInsights;
+using SFA.DAS.PushNotifications.Application.Services;
 using SFA.DAS.PushNotifications.Data.Extensions;
 using SFA.DAS.PushNotifications.Data.Repositories;
-using SFA.DAS.PushNotifications.Functions.StartupExtensions;
-using SFA.DAS.PushNotifications.Application.Services;
 using SFA.DAS.PushNotifications.Functions.Configuration;
-using Microsoft.Extensions.Configuration;
+using SFA.DAS.PushNotifications.Functions.StartupExtensions;
 
 [assembly: NServiceBusTriggerFunction("SFA.DAS.PushNotifications")]
 
@@ -33,20 +33,20 @@ var host = new HostBuilder()
     .AddTransient<IPushNotificationsService, PushNotificationsService>()
     .AddTransient<IApplicationClientRepository, ApplicationClientRepository>()
     .AddPushNotificationsDataContext(context.Configuration);
-
     var configuration = context.Configuration;
     var functionsConfig = configuration.GetSection("SFA.DAS.PushNotifications.Functions").Get<PushNotificationsFunctions>();
-    
+
     if (functionsConfig != null)
     {
-    Environment.SetEnvironmentVariable("AzureWebJobsServiceBus", functionsConfig.NServiceBusConnectionString);
-    Environment.SetEnvironmentVariable("NSERVICEBUS_LICENSE", functionsConfig.NServiceBusLicense);
+        Environment.SetEnvironmentVariable("AzureWebJobsServiceBus", functionsConfig.NServiceBusConnectionString);
+        Environment.SetEnvironmentVariable("NSERVICEBUS_LICENSE", functionsConfig.NServiceBusLicense);
     }
 })
     .UseNServiceBus((config, endpointConfiguration) =>
     {
         endpointConfiguration.AdvancedConfiguration.EnableInstallers();
         endpointConfiguration.AdvancedConfiguration.SendFailedMessagesTo(ErrorEndpointName);
+    
     })
     .Build();
 
