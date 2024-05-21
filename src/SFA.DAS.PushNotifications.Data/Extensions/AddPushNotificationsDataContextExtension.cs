@@ -10,6 +10,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace SFA.DAS.PushNotifications.Data.Extensions;
 
 
+[ExcludeFromCodeCoverage]
 public static class AddPushNotificationsDataContextExtension
 {
     private static readonly string AzureResource = "https://database.windows.net/";

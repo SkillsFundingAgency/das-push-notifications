@@ -1,6 +1,9 @@
 ﻿using AutoFixture.NUnit3;
 using FluentAssertions;
+using FluentAssertions.Execution;
+using Microsoft.Extensions.Logging;
 using Moq;
+using NUnit.Framework.Internal;
 using SFA.DAS.PushNotifications.Data.Repositories;
 using SFA.DAS.PushNotifications.Data.UnitTests.DatabaseMock;
 using SFA.DAS.Testing.AutoFixture;
@@ -14,25 +17,30 @@ namespace SFA.DAS.PushNotifications.Data.UnitTests.Repository
     {
         [Test, RecursiveMoqAutoData]
         public async Task Then_ApplicationClient_IsAdded(
-            List<ApplicationClient> applicationClients,
-            [Frozen] Mock<IPushNotificationsDataContext> mockContext,
-            ApplicationClientRepository repository,
-            ApplicationClient applicationClient)
+         List<ApplicationClient> applicationClients,
+         [Frozen] Mock<IPushNotificationsDataContext> mockContext,
+         [Frozen] Mock<ILogger<ApplicationClientRepository>> logger,
+         ApplicationClientRepository repository,
+         ApplicationClient applicationClient)
         {
             mockContext
                 .Setup(context => context.ApplicationClients)
                 .ReturnsDbSet(applicationClients);
-           
+
             CancellationToken cancellationToken = CancellationToken.None;
             await repository.AddWebPushNotificationSubscription(applicationClient, cancellationToken);
 
             mockContext.Verify(context => context.SaveChangesAsync(cancellationToken), Times.Once);
             applicationClient.Status.Should().Be((int)ApplicationClientStatus.Active);
+            logger.Verify(x => x.Log(LogLevel.Debug,It.IsAny<EventId>(),It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Adding push notification subscription for Endpoint")), null,(Func<It.IsAnyType, Exception, string>)It.IsAny<object>()));
+            logger.Verify(x => x.Log(LogLevel.Information, It.IsAny<EventId>(), It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Added push notification subscription for Endpoint")), null, (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()));
+
         }
 
         [Test, RecursiveMoqAutoData]
         public async Task The_ApplicationClient_IsReplaced_IfAlreadyExists(
             [Frozen] Mock<IPushNotificationsDataContext> mockContext,
+            [Frozen] Mock<ILogger<ApplicationClientRepository>> logger,
             ApplicationClientRepository repository)
         {
             List<ApplicationClient> applicationClients = new();
@@ -57,6 +65,7 @@ namespace SFA.DAS.PushNotifications.Data.UnitTests.Repository
             };
             CancellationToken cancellationToken = CancellationToken.None;
             await repository.AddWebPushNotificationSubscription(applicationClient2, cancellationToken);
+
 
             applicationClient2.Status.Should().Be((int)ApplicationClientStatus.Active);
             applicationClients.Count.Should().Be(1);

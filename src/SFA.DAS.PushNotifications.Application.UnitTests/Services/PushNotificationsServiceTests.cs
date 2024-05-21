@@ -24,5 +24,16 @@ namespace SFA.DAS.PushNotifications.Application.UnitTests.Services
         {
             Assert.DoesNotThrowAsync(async () => await service.RemoveWebPushNotificationSubscription(message));
         }
+
+        [Test, MoqAutoData]
+        public async Task Add_Web_Push_Notification_Subscriptions_ThrowsException_OnNullEndpoint(
+          PushNotificationsService service,
+          
+          AddWebPushSubscriptionCommand message)
+        {
+            message.Endpoint = null;
+
+            Assert.ThrowsAsync<ArgumentException>(async () => await service.AddWebPushNotificationSubscription(message));
+        }
     }
 }

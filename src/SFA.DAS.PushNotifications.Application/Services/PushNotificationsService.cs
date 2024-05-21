@@ -30,6 +30,12 @@ public class PushNotificationsService : IPushNotificationsService
 
         _logger.LogInformation("Adding subscription for {Endpoint}", message.Endpoint);
 
+        if(string.IsNullOrEmpty(message.Endpoint))
+        {
+            _logger.LogError("Endpoint is null or empty for apprenticeId {ApprenticeId}", message.ApprenticeId);
+            throw new ArgumentException("Endpoint is null or empty");
+        }
+      
         var applicationClient = new ApplicationClient
         {
             UserAccountId = message.ApprenticeId,
