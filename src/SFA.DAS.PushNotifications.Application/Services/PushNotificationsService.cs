@@ -28,7 +28,7 @@ public class PushNotificationsService : IPushNotificationsService
     {
         CancellationToken cancellationToken = CancellationToken.None;
 
-        _logger.LogInformation($"Adding subscription for {message.Endpoint}");
+        _logger.LogInformation("Adding subscription for {Endpoint}", message.Endpoint);
 
         var applicationClient = new ApplicationClient
         {
@@ -38,11 +38,14 @@ public class PushNotificationsService : IPushNotificationsService
             SubscriptionAuthenticationSecret = message.AuthenticationSecret
         };
         var appClientId = await _applicationClientRepository.AddWebPushNotificationSubscription(applicationClient, cancellationToken);
+        _logger.LogInformation("Added application client {AppClientId}", appClientId);
         return appClientId;
     }
 
     public async Task RemoveWebPushNotificationSubscription(RemoveWebPushSubscriptionCommand message)
     {
+        _logger.LogInformation("Unsubscribing to push notifications for {Endpoint}", message.Endpoint);
+
         CancellationToken cancellationToken = CancellationToken.None;
         var applicationClient = new ApplicationClient 
         { 
@@ -50,8 +53,8 @@ public class PushNotificationsService : IPushNotificationsService
             Endpoint = message.Endpoint 
         };
 
-        _logger.LogInformation($"Unsubscribing to push notifications for {applicationClient.Endpoint}");
-
         await _applicationClientRepository.RemoveWebPushNotificationSubscription(applicationClient, cancellationToken);
+
+        _logger.LogInformation("Unsubscribed to push notifications for {Endpoint}", applicationClient.Endpoint);
     }
 }

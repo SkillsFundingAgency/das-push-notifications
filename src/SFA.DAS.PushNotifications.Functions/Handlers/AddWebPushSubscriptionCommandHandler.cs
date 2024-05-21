@@ -16,7 +16,7 @@ namespace SFA.DAS.PushNotifications.Functions.Handlers
         }
         public async Task Handle(AddWebPushSubscriptionCommand message, IMessageHandlerContext context)
         {
-            _logger.LogInformation($"Handling AddWebPushSubscriptionCommand for {message.Endpoint}");
+            _logger.LogDebug("Handling AddWebPushSubscriptionCommand for {Endpoint}", message.Endpoint);
 
             try
             {
@@ -24,8 +24,10 @@ namespace SFA.DAS.PushNotifications.Functions.Handlers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error handling ApprenticeSubscriptionCreateEvent for {message.Endpoint}");
+                _logger.LogError(ex, "Error handling ApprenticeSubscriptionCreateEvent for {Endpoint}", message.Endpoint);
             }
+
+            _logger.LogInformation("Finished handling AddWebPushSubscriptionCommand for {Endpoint}", message.Endpoint);
         }
     }
 }

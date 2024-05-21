@@ -1,6 +1,7 @@
 ﻿using AutoFixture;
 using Microsoft.Extensions.Logging;
 using Moq;
+using NServiceBus;
 using SFA.DAS.PushNotifications.Application.Services;
 using SFA.DAS.PushNotifications.Functions.Handlers;
 using SFA.DAS.PushNotifications.Messages.Commands;

@@ -9,7 +9,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.PushNotifications.Data.Extensions;
 
-[ExcludeFromCodeCoverage]
+
 public static class AddPushNotificationsDataContextExtension
 {
     private static readonly string AzureResource = "https://database.windows.net/";
@@ -23,7 +23,7 @@ public static class AddPushNotificationsDataContextExtension
 
     public static IServiceCollection AddPushNotificationsDataContext(this IServiceCollection services, IConfiguration configuration)
     {
-        var sqlConnectionString = configuration["SFA.DAS.PushNotifications.Functions:DatabaseConnectionString"]!;
+        var sqlConnectionString = configuration["SFA.DAS.PushNotifications.Functions:DbConnectionString"]!;
         var environmentName = configuration["EnvironmentName"]!;
 
         services.AddDbContext<PushNotificationsDataContext>((serviceProvider, options) =>

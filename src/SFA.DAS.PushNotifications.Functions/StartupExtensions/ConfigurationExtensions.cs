@@ -18,6 +18,7 @@ namespace SFA.DAS.PushNotifications.Functions.StartupExtensions
 
             configBuilder.AddAzureTableStorage(options =>
             {
+                
                 options.ConfigurationKeys = ["SFA.DAS.PushNotifications.Functions"];
                 options.StorageConnectionString = config["ConfigurationStorageConnectionString"];
                 options.EnvironmentName = config["EnvironmentName"];

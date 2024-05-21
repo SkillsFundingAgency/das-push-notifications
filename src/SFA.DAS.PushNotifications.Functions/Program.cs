@@ -9,6 +9,7 @@ using SFA.DAS.PushNotifications.Data.Extensions;
 using SFA.DAS.PushNotifications.Data.Repositories;
 using SFA.DAS.PushNotifications.Functions.Configuration;
 using SFA.DAS.PushNotifications.Functions.StartupExtensions;
+using static SFA.DAS.PushNotifications.Functions.StartupExtensions.AddNServiceBusExtension;
 
 [assembly: NServiceBusTriggerFunction("SFA.DAS.PushNotifications")]
 
@@ -33,12 +34,11 @@ var host = new HostBuilder()
     .AddTransient<IPushNotificationsService, PushNotificationsService>()
     .AddTransient<IApplicationClientRepository, ApplicationClientRepository>()
     .AddPushNotificationsDataContext(context.Configuration);
-    var configuration = context.Configuration;
-    var functionsConfig = configuration.GetSection("SFA.DAS.PushNotifications.Functions").Get<PushNotificationsFunctions>();
+     var configuration = context.Configuration;
+     var functionsConfig = configuration.GetSection("SFA.DAS.PushNotifications.Functions").Get<PushNotificationsFunctions>();
 
     if (functionsConfig != null)
     {
-        Environment.SetEnvironmentVariable("AzureWebJobsServiceBus", functionsConfig.NServiceBusConnectionString);
         Environment.SetEnvironmentVariable("NSERVICEBUS_LICENSE", functionsConfig.NServiceBusLicense);
     }
 })
@@ -46,8 +46,7 @@ var host = new HostBuilder()
     {
         endpointConfiguration.AdvancedConfiguration.EnableInstallers();
         endpointConfiguration.AdvancedConfiguration.SendFailedMessagesTo(ErrorEndpointName);
-    
+        endpointConfiguration.AdvancedConfiguration.UseSerialization<NewtonsoftJsonSerializer>();
     })
     .Build();
-
 host.Run();

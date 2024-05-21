@@ -2,10 +2,9 @@
 {
     public class PushNotificationsFunctions
     {
-        public string DatabaseConnectionString { get; set; }
-        public string NServiceBusConnectionString { get; set; }
-        public string NServiceBusLicense {  get; set; }
-        public string NServiceBusEndpointName { get; set; }
-        public string SharedServiceBusNamespace { get; set; }
+        public string NServiceBusConnectionString { get; set; } = null!;
+        public string DbConnectionString { get; set; } = null!;
+        public string NServiceBusLicense { get; set; } = null!;
+        public string NServiceBusEndpointName { get; set; } = null!;   
     }
 }
