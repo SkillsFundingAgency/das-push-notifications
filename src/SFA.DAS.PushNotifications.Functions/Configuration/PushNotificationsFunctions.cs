@@ -1,5 +1,8 @@
-﻿namespace SFA.DAS.PushNotifications.Functions.Configuration
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace SFA.DAS.PushNotifications.Functions.Configuration
 {
+    [ExcludeFromCodeCoverage]
     public class PushNotificationsFunctions
     {
         public string NServiceBusConnectionString { get; set; } = null!;

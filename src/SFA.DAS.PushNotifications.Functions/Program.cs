@@ -9,7 +9,6 @@ using SFA.DAS.PushNotifications.Data.Extensions;
 using SFA.DAS.PushNotifications.Data.Repositories;
 using SFA.DAS.PushNotifications.Functions.Configuration;
 using SFA.DAS.PushNotifications.Functions.StartupExtensions;
-using static SFA.DAS.PushNotifications.Functions.StartupExtensions.AddNServiceBusExtension;
 
 [assembly: NServiceBusTriggerFunction("SFA.DAS.PushNotifications")]
 

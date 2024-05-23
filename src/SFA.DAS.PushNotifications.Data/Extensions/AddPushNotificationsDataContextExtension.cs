@@ -5,12 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.PushNotifications.Data.Repositories;
-using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.PushNotifications.Data.Extensions;
 
-
-[ExcludeFromCodeCoverage]
 public static class AddPushNotificationsDataContextExtension
 {
     private static readonly string AzureResource = "https://database.windows.net/";

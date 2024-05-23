@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.PushNotifications.A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.PushNotifications.Application.UnitTests", "SFA.DAS.PushNotifications.Application.UnitTests\SFA.DAS.PushNotifications.Application.UnitTests.csproj", "{EA542891-8D46-45E6-B60B-D3309A4A93B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.PushNotifications.Model", "SFA.DAS.PushNotifications.Model\SFA.DAS.PushNotifications.Model.csproj", "{6B2ED9A9-C7B7-4768-A6B7-A6AE820D7BD6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.PushNotifications.Model", "SFA.DAS.PushNotifications.Model\SFA.DAS.PushNotifications.Model.csproj", "{6B2ED9A9-C7B7-4768-A6B7-A6AE820D7BD6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

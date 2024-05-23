@@ -17,16 +17,16 @@ namespace SFA.DAS.PushNotifications.Functions.Handlers
 
         public async Task Handle(RemoveWebPushSubscriptionCommand message, IMessageHandlerContext context)
         {
-            try
+            if (message != null)
             {
-                _logger.LogDebug("Handling RemoveWebPushSubscriptionCommandHandler for {Endpoint}", message.Endpoint);
+                _logger.LogInformation("Handle RemoveWebPushSubscriptionCommand for {Endpoint}", message.Endpoint);
                 await _pushNotificationsService.RemoveWebPushNotificationSubscription(message);
+                _logger.LogInformation("Finished handling RemoveWebPushSubscriptionCommandHandler for {Endpoint}", message.Endpoint);
             }
-            catch (Exception ex)
+            else
             {
-                _logger.LogError(ex, "Error handling RemoveWebPushSubscriptionCommandHandler for {Endpoint}", message.Endpoint);
+                _logger.LogError("Error handling RemoveWebPushSubscriptionCommand. Missing or incorrect message supplied.");
             }
-            _logger.LogInformation("Finished handling RemoveWebPushSubscriptionCommandHandler for {Endpoint}", message.Endpoint);
         }
     }
 }
