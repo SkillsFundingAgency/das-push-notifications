@@ -26,12 +26,14 @@ namespace SFA.DAS.PushNotifications.Functions.StartupExtensions
                     endpointConfiguration.License(functionsConfig.NServiceBusLicense);
                 }
 
-                if (configuration["EnvironmentName"] == "LOCAL")
-                {
-                    var transport = endpointConfiguration.UseTransport<LearningTransport>();
-                    var routing = transport.Routing();
-                    routing.AddRouting(functionsConfig.NServiceBusEndpointName);
-                }
+#if DEBUG
+                var transport = endpointConfiguration.UseTransport<LearningTransport>();
+                transport.StorageDirectory(Path.Combine(Directory.GetCurrentDirectory().Substring(0, Directory.GetCurrentDirectory().IndexOf("src")),
+                    @"src\.learningtransport"));
+                transport.Routing().RouteToEndpoint(typeof(AddWebPushSubscriptionCommand), functionsConfig.NServiceBusEndpointName);
+                transport.Routing().RouteToEndpoint(typeof(RemoveWebPushSubscriptionCommand), functionsConfig.NServiceBusEndpointName);
+#endif
+
                 services.AddSingleton(endpointConfiguration);
                 services.AddHostedService<NServiceBusHostedService>();
                 

@@ -4,7 +4,7 @@ using SFA.DAS.PushNotifications.Messages.Commands;
 
 namespace SFA.DAS.PushNotifications.Functions.TestHarness;
 
-internal class Program
+internal static class Program
 {
     private const string EndpointName = "SFA.DAS.PushNotifications";
     private const string ConfigName = "SFA.DAS.PushNotifications.Functions";
@@ -15,16 +15,14 @@ internal class Program
         var builder = new ConfigurationBuilder()
             .AddAzureTableStorage(ConfigName);
 
-        var configuration = builder.Build();
+        builder.Build();
 
         var endpointConfiguration = new EndpointConfiguration(EndpointName);
         endpointConfiguration.SendFailedMessagesTo($"{EndpointName}-errors");
         endpointConfiguration.UseSerialization<NewtonsoftJsonSerializer>();
         endpointConfiguration.SendOnly();
 
-        if (configuration["EnvironmentName"] == "LOCAL")
-        {
-            var transport = endpointConfiguration.UseTransport<LearningTransport>();
+        var transport = endpointConfiguration.UseTransport<LearningTransport>();
             transport.StorageDirectory(
                 Path.Combine(
                     Directory.GetCurrentDirectory()
@@ -32,10 +30,10 @@ internal class Program
                     @"src\.learningtransport"));
             var routing = transport.Routing();
 
-            routing.RouteToEndpoint(typeof(AddWebPushSubscriptionCommand), "SFA.DAS.PushNotifications.AddWebPushSubscription");
-            routing.RouteToEndpoint(typeof(RemoveWebPushSubscriptionCommand), "SFA.DAS.PushNotifications.RemoveWebPushSubscription");
+            routing.RouteToEndpoint(typeof(AddWebPushSubscriptionCommand), "SFA.DAS.PushNotifications");
+            routing.RouteToEndpoint(typeof(RemoveWebPushSubscriptionCommand), "SFA.DAS.PushNotifications");
 
-        }
+        
 
         var endpointInstance = await Endpoint.Start(endpointConfiguration);
 

@@ -8,7 +8,11 @@ using SFA.DAS.PushNotifications.Application.Services;
 using SFA.DAS.PushNotifications.Data.Extensions;
 using SFA.DAS.PushNotifications.Data.Repositories;
 using SFA.DAS.PushNotifications.Functions.Configuration;
+using SFA.DAS.PushNotifications.Functions.Handlers;
 using SFA.DAS.PushNotifications.Functions.StartupExtensions;
+using SFA.DAS.PushNotifications.Messages.Commands;
+using static SFA.DAS.PushNotifications.Functions.StartupExtensions.AddNServiceBusExtension;
+
 
 [assembly: NServiceBusTriggerFunction("SFA.DAS.PushNotifications")]
 
@@ -33,19 +37,30 @@ var host = new HostBuilder()
     .AddTransient<IPushNotificationsService, PushNotificationsService>()
     .AddTransient<IApplicationClientRepository, ApplicationClientRepository>()
     .AddPushNotificationsDataContext(context.Configuration);
-     var configuration = context.Configuration;
-     var functionsConfig = configuration.GetSection("SFA.DAS.PushNotifications.Functions").Get<PushNotificationsFunctions>();
+    var configuration = context.Configuration;
+    var functionsConfig = configuration.GetSection("SFA.DAS.PushNotifications.Functions").Get<PushNotificationsFunctions>();
 
     if (functionsConfig != null)
     {
         Environment.SetEnvironmentVariable("NSERVICEBUS_LICENSE", functionsConfig.NServiceBusLicense);
+        Environment.SetEnvironmentVariable("AzureWebJobsStorage", functionsConfig.NServiceBusConnectionString);
     }
 })
-    .UseNServiceBus((config, endpointConfiguration) =>
+    .UseNServiceBus(config =>
     {
-        endpointConfiguration.AdvancedConfiguration.EnableInstallers();
-        endpointConfiguration.AdvancedConfiguration.SendFailedMessagesTo(ErrorEndpointName);
-        endpointConfiguration.AdvancedConfiguration.UseSerialization<NewtonsoftJsonSerializer>();
+        var endpointConfiguration = new EndpointConfiguration(EndpointName);
+        endpointConfiguration.EnableInstallers();
+        endpointConfiguration.SendFailedMessagesTo(ErrorEndpointName);
+        endpointConfiguration.UseSerialization<NewtonsoftJsonSerializer>();
+
+#if DEBUG
+        var transport = endpointConfiguration.UseTransport<LearningTransport>();
+        transport.StorageDirectory(Path.Combine(Directory.GetCurrentDirectory().Substring(0, Directory.GetCurrentDirectory().IndexOf("src")),
+            @"src\.learningtransport"));
+        transport.Routing().RouteToEndpoint(typeof(AddWebPushSubscriptionCommand), EndpointName);
+        transport.Routing().RouteToEndpoint(typeof(RemoveWebPushSubscriptionCommand), EndpointName);
+        
+#endif
     })
     .Build();
 host.Run();
