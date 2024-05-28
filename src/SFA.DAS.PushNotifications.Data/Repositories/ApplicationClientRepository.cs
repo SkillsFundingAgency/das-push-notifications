@@ -24,7 +24,7 @@ public class ApplicationClientRepository : IApplicationClientRepository
 
     public async Task<int> AddWebPushNotificationSubscription(ApplicationClient applicationClient, CancellationToken cancellationToken)
     {
-       _logger.LogDebug("Adding push notification subscription for {Endpoint}", applicationClient.Endpoint);
+       _logger.LogInformation("Adding push notification subscription for {Endpoint}", applicationClient.Endpoint);
 
         var appClients = _context.ApplicationClients.Where(x => x.Endpoint == applicationClient.Endpoint);
         if(appClients.Any()) { 
@@ -47,7 +47,7 @@ public class ApplicationClientRepository : IApplicationClientRepository
 
     public async Task RemoveWebPushNotificationSubscription(ApplicationClient applicationClient, CancellationToken cancellationToken)
     {
-        _logger.LogDebug("Removing push notification subscription for {Endpoint}", applicationClient.Endpoint);
+        _logger.LogInformation("Removing push notification subscription for {Endpoint}", applicationClient.Endpoint);
         var appClient = _context.ApplicationClients.FirstOrDefault(x => x.Endpoint == applicationClient.Endpoint);
         if (appClient == null)
         {

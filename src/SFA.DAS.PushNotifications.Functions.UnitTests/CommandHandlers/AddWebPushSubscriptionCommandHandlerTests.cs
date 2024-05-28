@@ -1,6 +1,5 @@
 ﻿using AutoFixture;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 using Moq;
 using NServiceBus.Testing;
 using SFA.DAS.PushNotifications.Application.Services;
@@ -32,7 +31,10 @@ namespace SFA.DAS.PushNotifications.Functions.UnitTests.CommandHandlers
         [Test]
         public async Task Run_Invokes_AddWebPushSubscription_Command()
         {
+            //Act
             await _handler.Handle(_event, _context);
+
+            //Assert
             _service.Verify(x => x.AddWebPushNotificationSubscription(_event));
             _logger.Verify(x => x.Log(
                LogLevel.Information, It.IsAny<EventId>(), 
@@ -44,7 +46,8 @@ namespace SFA.DAS.PushNotifications.Functions.UnitTests.CommandHandlers
         [Test]
         public async Task Run_Invokes_AddWebPushSubscription_Command_Handles_NullEvent()
         {
-            await _handler.Handle(null, _context);
+            //Act & Assert
+            Assert.DoesNotThrowAsync(async () => await _handler.Handle(null, _context));
             _logger.Verify(x => x.Log(
                  LogLevel.Error, It.IsAny<EventId>(),
                  It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Error handling AddWebPushSubscriptionCommand. Missing or incorrect message supplied.")), null,

@@ -21,6 +21,7 @@ namespace SFA.DAS.PushNotifications.Data.UnitTests.Repository
            [Frozen] Mock<ILogger<ApplicationClientRepository>> logger,
            ApplicationClientRepository repository)
         {
+            //Arrange
             ApplicationClient applicationClient = applicationClients[0];
             applicationClient.Status = (int)ApplicationClientStatus.Active;
             mockContext
@@ -28,8 +29,11 @@ namespace SFA.DAS.PushNotifications.Data.UnitTests.Repository
                 .ReturnsDbSet(applicationClients);
 
             CancellationToken cancellationToken = CancellationToken.None;
+
+            //Act
             await repository.RemoveWebPushNotificationSubscription(applicationClient, cancellationToken);
 
+            //Assert
             mockContext.Verify(context => context.SaveChangesAsync(cancellationToken), Times.Once);
             applicationClient.Status.Should().Be((int)ApplicationClientStatus.Unsubscribed);
             logger.Verify(x => x.Log(LogLevel.Debug, It.IsAny<EventId>(), It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Removing push notification subscription for Endpoint")), null, (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()));
@@ -40,7 +44,8 @@ namespace SFA.DAS.PushNotifications.Data.UnitTests.Repository
         public async Task Then_NothingHappens_IfEndpointNotInDb(
           [Frozen] Mock<IPushNotificationsDataContext> mockContext,
           ApplicationClientRepository repository)
-        {
+        {   
+            //Arrange
             List<ApplicationClient> applicationClients = new();
             mockContext
                 .Setup(context => context.ApplicationClients)
@@ -54,7 +59,11 @@ namespace SFA.DAS.PushNotifications.Data.UnitTests.Repository
                 SubscriptionPublicKey = "testkey"
             };
             CancellationToken cancellationToken = CancellationToken.None;
+
+            //Act
             await repository.RemoveWebPushNotificationSubscription(applicationClient, cancellationToken);
+
+            //Assert
             applicationClients.Count.Should().Be(0);
         }
     }
