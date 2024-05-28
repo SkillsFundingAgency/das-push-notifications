@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
-using SFA.DAS.PushNotifications.Data;   
+using SFA.DAS.PushNotifications.Data;
 using SFA.DAS.PushNotifications.Data.Extensions;
 
 namespace SFA.DAS.PushNotifications.Functions.UnitTests.StartupExtensions
@@ -12,6 +12,7 @@ namespace SFA.DAS.PushNotifications.Functions.UnitTests.StartupExtensions
         [Test]
         public void ThenTheDataContextIsAddedToTheServiceCollection()
         {
+            //Arrange
             var mockConfiguration = new Mock<IConfiguration>();
             mockConfiguration.Setup(c => c["EnvironmentName"]).Returns("LOCAL");
 
@@ -20,7 +21,11 @@ namespace SFA.DAS.PushNotifications.Functions.UnitTests.StartupExtensions
             services.AddPushNotificationsDataContext(mockConfiguration.Object);
 
             var serviceProvider = services.BuildServiceProvider();
+
+            //Act
             var dataContext = serviceProvider.GetService<IPushNotificationsDataContext>();
+
+            //Assert
             Assert.IsNotNull(dataContext);
         }
     }
