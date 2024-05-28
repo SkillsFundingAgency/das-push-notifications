@@ -36,7 +36,7 @@ namespace SFA.DAS.PushNotifications.Data.UnitTests.Repository
             //Assert
             mockContext.Verify(context => context.SaveChangesAsync(cancellationToken), Times.Once);
             applicationClient.Status.Should().Be((int)ApplicationClientStatus.Unsubscribed);
-            logger.Verify(x => x.Log(LogLevel.Debug, It.IsAny<EventId>(), It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Removing push notification subscription for Endpoint")), null, (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()));
+            logger.Verify(x => x.Log(LogLevel.Information, It.IsAny<EventId>(), It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Removing push notification subscription for Endpoint")), null, (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()));
             logger.Verify(x => x.Log(LogLevel.Information, It.IsAny<EventId>(), It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Removed push notification subscription for Endpoint")), null, (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()));
         }
 
