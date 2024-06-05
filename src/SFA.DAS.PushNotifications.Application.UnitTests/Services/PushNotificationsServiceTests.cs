@@ -25,7 +25,7 @@ namespace SFA.DAS.PushNotifications.Application.UnitTests.Services
 
 
         [Test, MoqAutoData]
-        public async Task Add_Web_Push_Notification_Subscription_Returns_Id(AddWebPushSubscriptionCommand message)
+        public void Add_Web_Push_Notification_Subscription_Returns_Id(AddWebPushSubscriptionCommand message)
         {
             // Act
             var result = _service.AddWebPushNotificationSubscription(message);
