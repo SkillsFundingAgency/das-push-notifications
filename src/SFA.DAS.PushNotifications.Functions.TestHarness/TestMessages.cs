@@ -1,8 +1,10 @@
 ﻿using NServiceBus.Logging;
 using SFA.DAS.PushNotifications.Messages.Commands;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.PushNotifications.Functions
 {
+    [ExcludeFromCodeCoverage]
     public class TestMessages
     {
         static ILog log = LogManager.GetLogger<TestMessages>();

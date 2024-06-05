@@ -8,10 +8,8 @@ using SFA.DAS.PushNotifications.Application.Services;
 using SFA.DAS.PushNotifications.Data.Extensions;
 using SFA.DAS.PushNotifications.Data.Repositories;
 using SFA.DAS.PushNotifications.Functions.Configuration;
-using SFA.DAS.PushNotifications.Functions.Handlers;
 using SFA.DAS.PushNotifications.Functions.StartupExtensions;
 using SFA.DAS.PushNotifications.Messages.Commands;
-using static SFA.DAS.PushNotifications.Functions.StartupExtensions.AddNServiceBusExtension;
 
 
 [assembly: NServiceBusTriggerFunction("SFA.DAS.PushNotifications")]
@@ -59,7 +57,7 @@ var host = new HostBuilder()
             @"src\.learningtransport"));
         transport.Routing().RouteToEndpoint(typeof(AddWebPushSubscriptionCommand), EndpointName);
         transport.Routing().RouteToEndpoint(typeof(RemoveWebPushSubscriptionCommand), EndpointName);
-        
+
 #endif
     })
     .Build();
