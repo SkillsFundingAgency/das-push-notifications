@@ -10,8 +10,9 @@ using SFA.DAS.PushNotifications.Data.Repositories;
 using SFA.DAS.PushNotifications.Functions.Configuration;
 using SFA.DAS.PushNotifications.Functions.StartupExtensions;
 using SFA.DAS.PushNotifications.Messages.Commands;
+using System.Diagnostics.CodeAnalysis;
 
-
+[assembly: ExcludeFromCodeCoverage]
 [assembly: NServiceBusTriggerFunction("SFA.DAS.PushNotifications")]
 
 const string EndpointName = "SFA.DAS.PushNotifications";
@@ -25,6 +26,7 @@ var host = new HostBuilder()
     })
 .ConfigureServices((context, services) =>
 {
+
     services.AddLogging(builder =>
     {
         builder.AddFilter<ApplicationInsightsLoggerProvider>(string.Empty, LogLevel.Information);

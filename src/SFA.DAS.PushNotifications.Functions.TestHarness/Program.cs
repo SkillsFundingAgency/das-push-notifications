@@ -1,8 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.PushNotifications.Messages.Commands;
+using System.Diagnostics.CodeAnalysis;
 
+[assembly: ExcludeFromCodeCoverage]
 namespace SFA.DAS.PushNotifications.Functions.TestHarness;
+
 
 internal static class Program
 {
