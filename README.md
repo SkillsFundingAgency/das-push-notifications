@@ -15,7 +15,7 @@ The push notification function app is an utility that receives and processes pus
 
 
 ## How It Works
-
+The notification function app uses NServiceBus protocol to send requests per notification to the notification queue. The functions connects directly with the das-push-notifications database to get and update data.
 
 
 ## 🚀 Installation
