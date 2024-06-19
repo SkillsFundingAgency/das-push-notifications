@@ -11,7 +11,7 @@
 [![Confluence Project](https://img.shields.io/badge/Confluence-Project-blue)](https://skillsfundingagency.atlassian.net/wiki/spaces/_pageurl_)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey.svg?longCache=true&style=flat-square)](https://en.wikipedia.org/wiki/MIT_License)
 
-The push notification function app is an app that receives and processes push notifications and push request subscriptions inbound from the Outer Api.
+The push notification function app is an utility that receives and processes push notifications and push notification subscription requests inbound from the Outer Api.
 
 
 ## How It Works
