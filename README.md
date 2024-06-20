@@ -15,7 +15,6 @@ The push notification function app is an app that receives and processes push no
 
 
 ## How It Works
-Requests are sent from the Apprentice App Outer API and placed into a queue via NServiceBus. The Push Notification Function App listens to the Push Notification queue and proceses any items in the queue. The Function App connects directly with the das-push-notifications database to get and update data.
 
 
 ## 🚀 Installation
