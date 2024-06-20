@@ -11,11 +11,11 @@
 [![Confluence Project](https://img.shields.io/badge/Confluence-Project-blue)](https://skillsfundingagency.atlassian.net/wiki/spaces/_pageurl_)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey.svg?longCache=true&style=flat-square)](https://en.wikipedia.org/wiki/MIT_License)
 
-The push notification function app is an app that receives and processes push notifications and push request subscriptions inbound from the Outer Api.
+The push notification function app is an app that receives and processes push notifications and push request subscriptions inbound from the Apprentice App Outer Api.
 
 
 ## How It Works
-
+Requests are sent from the Apprentice App Outer API and placed into a queue via NServiceBus. The Push Notification Function App listens to the Push Notification queue and proceses any items in the queue. The Function App connects directly with the das-push-notifications database to get and update data.
 
 
 ## 🚀 Installation
@@ -39,7 +39,7 @@ AppSettings.Development.json file
 ```json
 {
     "SFA.DAS.PushNotifications.Functions": {
-        "NServiceBusLicense": "<LICENSEKEY",
+        "NServiceBusLicense": "<LICENSEKEY>",
         "NServiceBusEndpointName": "SFA.DAS.PushNotifications",
         "DbConnectionString": "Data Source=.;Initial Catalog=SFA.DAS.PushNotifications.Database;Integrated Security=True"
     }
@@ -48,7 +48,7 @@ AppSettings.Development.json file
 
 Azure Table Storage config
 
-Row Key: SFA.DAS.Tools.Servicebus.Support_1.0
+Row Key: SFA.DAS.PushNotifications.Functions_1.0
 
 Partition Key: LOCAL
 
@@ -56,33 +56,20 @@ Data:
 
 ```json
 {
-  "BaseUrl": "localhost:5001",
-  "UserIdentitySettings":{
-    "RequiredRole": "Servicebus Admin", 
-    "UserSessionExpiryHours": 24,
-    "UserRefreshSessionIntervalMinutes": 5,
-    "NameClaim": "name"
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    "EnvironmentName": "LOCAL",
+    "ConfigurationStorageConnectionString": "UseDevelopmentStorage=true"
   },
-  "ServiceBusSettings":{
-    "ServiceBusConnectionString": "",
-    "QueueSelectionRegex": "[-,_]+error",
-    "PeekMessageBatchSize": 10,
-    "MaxRetrievalSize": 250,
-    "ErrorQueueRegex": "[-,_]error[s]*$",
-    "RedactPatterns": [
-      "(.*SharedAccessKey=)([\\s\\S]+=)(.*)"
-    ]
-  },
-  "CosmosDbSettings":{
-    "Url": "",
-    "AuthKey": "",
-    "DatabaseName": "QueueExplorer",
-    "CollectionName": "Session",
-    "Throughput": 400,
-    "DefaultCosmosOperationTimeout": 55,
-    "DefaultCosmosInterimRequestTimeout": 2
+  "SFA.DAS.PushNotifications.Functions": {
+    "NServiceBusConnectionString": "<INSERTSTRING>",
+    "NServiceBusLicense": "",
+    "NServiceBusEndpointName": "SFA.DAS.PushNotifications.Functions",
+    "DbConnectionString": "<INSERTSTRING>"
   }
-}
+    }
 ```
 
 ## 🔗 External Dependencies
@@ -96,7 +83,10 @@ Data:
 ```
 * Azure Functions V3
 * Azure Table Storage
-
+* Moq
+* NUnit
+* FluentAssertions
+* NServiceBus
 ```
 
 ## 🐛 Known Issues
