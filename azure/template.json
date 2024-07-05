@@ -87,8 +87,8 @@
             "type": "string",
             "defaultValue": "[utcNow()]"
         },
-        "sharedServiceBusFqdn": {
-            "type": "string"
+        "ServiceBusConnectionString": {
+            "type": "securestring"
         }
     },
     "variables": {
