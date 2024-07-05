@@ -252,7 +252,7 @@
                                 },
                                 {
                                     "name": "AzureWebJobsServiceBus",
-                                    "value": "[parameters('sharedServiceBusFqdn')]"
+                                    "value": "[parameters('ServiceBusConnectionString')]"
                                 },
                                 {
                                     "name": "LoggingRedisConnectionString",
