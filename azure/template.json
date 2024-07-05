@@ -251,7 +251,7 @@
                                     "value": "[parameters('sharedStorageAccountConnectionString')]"
                                 },
                                 {
-                                    "name": "AzureWebJobsServiceBus__fullyQualifiedNamespace",
+                                    "name": "AzureWebJobsServiceBus",
                                     "value": "[parameters('sharedServiceBusFqdn')]"
                                 },
                                 {
