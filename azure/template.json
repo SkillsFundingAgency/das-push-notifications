@@ -87,8 +87,8 @@
             "type": "string",
             "defaultValue": "[utcNow()]"
         },
-        "sharedServiceBusFqdn": {
-            "type": "string"
+        "serviceBusConnectionString": {
+            "type": "securestring"
         }
     },
     "variables": {
@@ -251,8 +251,8 @@
                                     "value": "[parameters('sharedStorageAccountConnectionString')]"
                                 },
                                 {
-                                    "name": "AzureWebJobsServiceBus__fullyQualifiedNamespace",
-                                    "value": "[parameters('sharedServiceBusFqdn')]"
+                                    "name": "AzureWebJobsServiceBus",
+                                    "value": "[parameters('serviceBusConnectionString')]"
                                 },
                                 {
                                     "name": "LoggingRedisConnectionString",
