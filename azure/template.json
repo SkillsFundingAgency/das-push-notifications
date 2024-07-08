@@ -87,7 +87,7 @@
             "type": "string",
             "defaultValue": "[utcNow()]"
         },
-        "ServiceBusConnectionString": {
+        "serviceBusConnectionString": {
             "type": "securestring"
         }
     },
@@ -252,7 +252,7 @@
                                 },
                                 {
                                     "name": "AzureWebJobsServiceBus",
-                                    "value": "[parameters('ServiceBusConnectionString')]"
+                                    "value": "[parameters('serviceBusConnectionString')]"
                                 },
                                 {
                                     "name": "LoggingRedisConnectionString",
