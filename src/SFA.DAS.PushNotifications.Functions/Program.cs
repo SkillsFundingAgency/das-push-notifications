@@ -5,9 +5,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.ApplicationInsights;
 using SFA.DAS.PushNotifications.Application.Services;
+using SFA.DAS.PushNotifications.Configuration;
 using SFA.DAS.PushNotifications.Data.Extensions;
 using SFA.DAS.PushNotifications.Data.Repositories;
-using SFA.DAS.PushNotifications.Functions.Configuration;
 using SFA.DAS.PushNotifications.Functions.StartupExtensions;
 using SFA.DAS.PushNotifications.Messages.Commands;
 using System.Diagnostics.CodeAnalysis;
@@ -38,12 +38,13 @@ var host = new HostBuilder()
     .AddTransient<IApplicationClientRepository, ApplicationClientRepository>()
     .AddPushNotificationsDataContext(context.Configuration);
     var configuration = context.Configuration;
-    var functionsConfig = configuration.GetSection("SFA.DAS.PushNotifications.Functions").Get<PushNotificationsFunctions>();
+    var functionsConfig = configuration.GetSection("SFA.DAS.PushNotifications.Functions").Get<PushNotificationsFunctionsConfig>();
 
     if (functionsConfig != null)
     {
         Environment.SetEnvironmentVariable("NSERVICEBUS_LICENSE", functionsConfig.NServiceBusLicense);
         Environment.SetEnvironmentVariable("AzureWebJobsStorage", functionsConfig.NServiceBusConnectionString);
+        Environment.SetEnvironmentVariable("AzureWebJobsServiceBus", functionsConfig.NServiceBusConnectionString);
     }
 })
     .UseNServiceBus(config =>

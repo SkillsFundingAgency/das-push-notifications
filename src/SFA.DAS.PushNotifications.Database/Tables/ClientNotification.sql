@@ -1,9 +1,11 @@
 ﻿CREATE TABLE [dbo].[ClientNotification]
 (
-	[Id] INT NOT NULL PRIMARY KEY, 
-    [MessageId] UNIQUEIDENTIFIER NULL, 
-    [Status] TINYINT NULL, 
-    [FailureReason] NVARCHAR(2000) NULL, 
-    [TimeToSend] DATETIME NULL, 
-    [StatusTime] DATETIME NULL
+	[Id] [uniqueidentifier] NOT NULL,
+	[Status] [tinyint] NULL,
+	[CreatedTime] [datetime] NULL,
+	[FailureReason] [nvarchar](2000) NULL,
+	[TimeToSend] [datetime] NULL,
+	[TimeSent] [datetime] NULL,
+	[ApplicationClientId] [int] NULL,
+	[Payload] [nvarchar](max) NULL
 )
