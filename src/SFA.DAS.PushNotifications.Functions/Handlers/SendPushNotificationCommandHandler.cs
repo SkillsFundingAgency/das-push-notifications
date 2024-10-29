@@ -18,7 +18,7 @@ namespace SFA.DAS.PushNotifications.Functions.Handlers
         {
             if (message != null)
             {
-                string preMessage = $"Handle SendPushNotificationCommand for {message.ApprenticeId}";
+                string preMessage = $"Handle SendPushNotificationCommand for {message.ApprenticeAccountIdentifier}";
                 _logger.LogInformation(preMessage);
                 await _pushNotificationsService.ProcessPushNotificationMessage(message);
             }

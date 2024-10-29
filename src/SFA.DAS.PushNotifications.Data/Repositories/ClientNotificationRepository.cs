@@ -1,6 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore.Storage.Json;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using SFA.DAS.PushNotifications.Messages.Commands;
 using SFA.DAS.PushNotifications.Model.Entities;
+using System;
 using System.Threading;
 
 namespace SFA.DAS.PushNotifications.Data.Repositories
@@ -25,14 +28,16 @@ namespace SFA.DAS.PushNotifications.Data.Repositories
         public async Task<ClientNotification> AddClientNotification(int applicationClientId, SendPushNotificationCommand message, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Adding clientNotification for applicationClientId {Id}", applicationClientId);
-
+            string payload = await PayloadContents(message);
             ClientNotification clientNotification = new()
             {
                 Status = (int)ClientNotificationStatus.Pending,
                 CreatedTime = DateTime.UtcNow,
                 ApplicationClientId = applicationClientId,
-                Payload = message, //encrypt
-                Id = Guid.NewGuid()
+                Payload = payload,
+                Id = Guid.NewGuid(),
+                TimeToSend = DateTime.UtcNow,
+                TimeSent = DateTime.UtcNow
             };
 
             _context.ClientNotification.Add(clientNotification);
@@ -48,6 +53,18 @@ namespace SFA.DAS.PushNotifications.Data.Repositories
             _logger.LogInformation("Sending push notification for {applicationClientId}", notification.ApplicationClientId);
             await _context.ClientNotification.AddAsync(notification, cancellation);
             await _context.SaveChangesAsync(cancellation);
+        }
+
+        private async Task<string> PayloadContents(SendPushNotificationCommand message)
+        {
+            var payload = JsonConvert.SerializeObject(new
+            {
+                title = message.Title,
+                message = message.Body,
+                url = "https://localhost:5003/Tasks?status=0"
+            });
+
+            return payload;
         }
     }
 }

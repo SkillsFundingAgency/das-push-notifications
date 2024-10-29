@@ -13,7 +13,7 @@ namespace SFA.DAS.PushNotifications.Model.Entities
         public DateTime TimeToSend { get; set; }
         public DateTime TimeSent { get; set; }
         public int ApplicationClientId { get; set; }
-        public SendPushNotificationCommand Payload { get; set; } = null!;
+        public string Payload { get; set; } = null!;
     }
 
     [Flags]

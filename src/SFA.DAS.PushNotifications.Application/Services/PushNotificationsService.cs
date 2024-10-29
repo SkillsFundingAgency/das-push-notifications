@@ -77,21 +77,20 @@ public class PushNotificationsService : IPushNotificationsService
 
     public async Task ProcessPushNotificationMessage(SendPushNotificationCommand message)
     {
-        if (!string.IsNullOrEmpty(message.ApprenticeId.ToString()))
+        if (!string.IsNullOrEmpty(message.ApprenticeAccountIdentifier.ToString()))
         {
             CancellationToken cancellationToken = CancellationToken.None;
-            List<ApplicationClient> applicationClients = await _applicationClientRepository.GetApplicationClients((int)ApplicationEnum.Application.ApprenticeApp, message.ApprenticeId);
+            List<ApplicationClient> applicationClients = await _applicationClientRepository.GetApplicationClients((int)ApplicationEnum.Application.ApprenticeApp, message.ApprenticeAccountIdentifier);
         
             if(applicationClients == null || applicationClients.Count > 0)
             {
                 foreach(var appClient in applicationClients)
                 {
-                    //create encrypted message
                     var clientNotification = await _clientNotificationRepository.AddClientNotification(appClient.Id, message, cancellationToken);
                     if(clientNotification != null)
                     {
                         var subscription = await GetSubscriptionDetails(appClient);
-                        await SendNotification(subscription, clientNotification.Payload.Body);
+                        await SendNotification(subscription, clientNotification.Payload);
                     }
                 }
             }
@@ -112,20 +111,27 @@ public class PushNotificationsService : IPushNotificationsService
 
     private async Task SendNotification(PushSubscription subscription, string payload)
     {
+        var publicKey = _configuration["SFA.DAS.PushNotifications.Functions:VapidKeys:PublicKey"];
+        var privateKey = _configuration["SFA.DAS.PushNotifications.Functions:VapidKeys:PrivateKey"];
+
         var vapidDetails = new VapidDetails(
             "mailto:cathy.groom@education.gov.uk",
-            _configuration["VapidPublicKey"],
-            _configuration["VapidPrivateKey"]
-       );
+            publicKey, privateKey
+        );
         var webPushClient = new WebPushClient();
         try
         {
-            webPushClient.SendNotification(subscription, payload, vapidDetails);
+            CancellationToken cancellationToken = CancellationToken.None;
+            await webPushClient.SendNotificationAsync(subscription, payload, vapidDetails, cancellationToken);
             _logger.LogInformation("Push notification sent successfully.");
         }
         catch (WebPushException exception)
         {
-            _logger.LogInformation("Error sending notification: " + exception.Message);
+            _logger.LogError(exception, "Error sending notification: {Message}", exception.Message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error sending notification: {Message}", ex.Message);
         }
     }
 }

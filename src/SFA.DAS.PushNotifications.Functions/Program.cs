@@ -36,6 +36,7 @@ var host = new HostBuilder()
     .ConfigureFunctionsApplicationInsights()
     .AddTransient<IPushNotificationsService, PushNotificationsService>()
     .AddTransient<IApplicationClientRepository, ApplicationClientRepository>()
+    .AddTransient<IClientNotificationRepository, ClientNotificationRepository>()
     .AddPushNotificationsDataContext(context.Configuration);
     var configuration = context.Configuration;
     var functionsConfig = configuration.GetSection("SFA.DAS.PushNotifications.Functions").Get<PushNotificationsFunctionsConfig>();

@@ -25,6 +25,7 @@ public class ApplicationClientRepository : IApplicationClientRepository
 
     public async Task<int> AddWebPushNotificationSubscription(ApplicationClient applicationClient, CancellationToken cancellationToken)
     {
+        
         _logger.LogInformation("Adding push notification subscription for {Endpoint}", applicationClient.Endpoint);
 
         var appClients = _context.ApplicationClients.Where(x => x.Endpoint == applicationClient.Endpoint);
