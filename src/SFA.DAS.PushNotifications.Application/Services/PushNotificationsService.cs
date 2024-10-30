@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using SFA.DAS.PushNotifications.Data.Repositories;
 using SFA.DAS.PushNotifications.Messages.Commands;
 using SFA.DAS.PushNotifications.Model.Entities;
@@ -82,7 +81,7 @@ public class PushNotificationsService : IPushNotificationsService
             CancellationToken cancellationToken = CancellationToken.None;
             List<ApplicationClient> applicationClients = await _applicationClientRepository.GetApplicationClients((int)ApplicationEnum.Application.ApprenticeApp, message.ApprenticeAccountIdentifier);
         
-            if(applicationClients == null || applicationClients.Count > 0)
+            if(applicationClients != null && applicationClients.Count > 0)
             {
                 foreach(var appClient in applicationClients)
                 {
@@ -90,9 +89,30 @@ public class PushNotificationsService : IPushNotificationsService
                     if(clientNotification != null)
                     {
                         var subscription = await GetSubscriptionDetails(appClient);
-                        await SendNotification(subscription, clientNotification.Payload);
+                        if (!string.IsNullOrEmpty(subscription.Endpoint))
+                        { 
+                            _logger.LogInformation("Sending notification for Client Notification Id {ClientNotificationId}", clientNotification.Id);
+                            var result = await SendNotification(subscription, clientNotification.Payload);
+                            if (result == "success")
+                            {
+                                clientNotification.Status = (int)ClientNotificationStatus.Success;
+
+                            }
+                            else
+                            {
+                                clientNotification.Status = (int)ClientNotificationStatus.Failed;
+                                clientNotification.FailureReason = result;
+                            }
+
+                            await _clientNotificationRepository.UpdateClientNotification(clientNotification, cancellationToken);
+                        }
                     }
                 }
+            }
+            else
+            {
+                _logger.LogInformation("No application clients stored for this apprentice account identifier: {ApprenticeAccountIdentifier}", message.ApprenticeAccountIdentifier);
+                await Task.CompletedTask;
             }
         }
     }
@@ -102,14 +122,10 @@ public class PushNotificationsService : IPushNotificationsService
         var subscription = new PushSubscription(appClient.Endpoint,
           appClient.SubscriptionPublicKey, appClient.SubscriptionAuthenticationSecret);
 
-        if (subscription.Endpoint != null)
-        {
-            return subscription;
-        }
-        return null;
+        return subscription;
     }
 
-    private async Task SendNotification(PushSubscription subscription, string payload)
+    private async Task<string> SendNotification(PushSubscription subscription, string payload)
     {
         var publicKey = _configuration["SFA.DAS.PushNotifications.Functions:VapidKeys:PublicKey"];
         var privateKey = _configuration["SFA.DAS.PushNotifications.Functions:VapidKeys:PrivateKey"];
@@ -118,20 +134,29 @@ public class PushNotificationsService : IPushNotificationsService
             "mailto:cathy.groom@education.gov.uk",
             publicKey, privateKey
         );
-        var webPushClient = new WebPushClient();
-        try
+
+        if (!string.IsNullOrEmpty(vapidDetails.PublicKey))
         {
-            CancellationToken cancellationToken = CancellationToken.None;
-            await webPushClient.SendNotificationAsync(subscription, payload, vapidDetails, cancellationToken);
-            _logger.LogInformation("Push notification sent successfully.");
+            var webPushClient = new WebPushClient();
+            try
+            {
+                CancellationToken cancellationToken = CancellationToken.None;
+                await webPushClient.SendNotificationAsync(subscription, payload, vapidDetails, cancellationToken);
+                _logger.LogInformation("Push notification sent successfully.");
+                return "success";
+            }
+            catch (WebPushException exception)
+            {
+                _logger.LogError(exception, "Error sending notification: {Message}", exception.Message);
+                return exception.Message;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error sending notification: {Message}", ex.Message);
+                return ex.Message;
+            }
         }
-        catch (WebPushException exception)
-        {
-            _logger.LogError(exception, "Error sending notification: {Message}", exception.Message);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error sending notification: {Message}", ex.Message);
-        }
+        
+        return "No Vapid Keys Found";
     }
 }

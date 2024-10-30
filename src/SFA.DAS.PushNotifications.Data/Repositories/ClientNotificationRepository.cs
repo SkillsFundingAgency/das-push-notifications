@@ -1,17 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore.Storage.Json;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SFA.DAS.PushNotifications.Messages.Commands;
 using SFA.DAS.PushNotifications.Model.Entities;
-using System;
-using System.Threading;
 
 namespace SFA.DAS.PushNotifications.Data.Repositories
 {
     public interface IClientNotificationRepository
     {
         Task<ClientNotification> AddClientNotification(int applicationClientId, SendPushNotificationCommand message, CancellationToken cancellation);
-        Task SendPushNotification(ClientNotification notification, CancellationToken cancellation);
+        Task<ClientNotification> UpdateClientNotification(ClientNotification clientNotification, CancellationToken cancellationToken);
     }
 
     public class ClientNotificationRepository : IClientNotificationRepository
@@ -48,19 +45,21 @@ namespace SFA.DAS.PushNotifications.Data.Repositories
             return clientNotification;
         }
 
-        public async Task SendPushNotification(ClientNotification notification, CancellationToken cancellation)
+        public async Task<ClientNotification> UpdateClientNotification(ClientNotification clientNotification, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Sending push notification for {applicationClientId}", notification.ApplicationClientId);
-            await _context.ClientNotification.AddAsync(notification, cancellation);
-            await _context.SaveChangesAsync(cancellation);
+            _logger.LogInformation("Updating clientNotification for {Id}", clientNotification.Id);
+            _context.ClientNotification.Update(clientNotification);
+            await _context.SaveChangesAsync(cancellationToken);
+            _logger.LogInformation("Updated client notification for {Id}", clientNotification.Id);
+
+            return clientNotification;
         }
 
         private async Task<string> PayloadContents(SendPushNotificationCommand message)
         {
             var payload = JsonConvert.SerializeObject(new
             {
-                title = message.Title,
-                message = message.Body,
+                message = "Task: " + message.Title + " needs your attention.",
                 url = "https://localhost:5003/Tasks?status=0"
             });
 

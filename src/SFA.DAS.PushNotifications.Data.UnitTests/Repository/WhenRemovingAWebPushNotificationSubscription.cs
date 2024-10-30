@@ -6,7 +6,6 @@ using SFA.DAS.PushNotifications.Data.Repositories;
 using SFA.DAS.PushNotifications.Data.UnitTests.DatabaseMock;
 using SFA.DAS.PushNotifications.Model.Entities;
 using SFA.DAS.Testing.AutoFixture;
-using static SFA.DAS.PushNotifications.Model.Entities.ApplicationClientStatusEnum;
 
 namespace SFA.DAS.PushNotifications.Data.UnitTests.Repository
 {

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿
+using Microsoft.Extensions.Logging;
 using SFA.DAS.PushNotifications.Model.Entities;
 using static SFA.DAS.PushNotifications.Model.Entities.ApplicationEnum;
 
