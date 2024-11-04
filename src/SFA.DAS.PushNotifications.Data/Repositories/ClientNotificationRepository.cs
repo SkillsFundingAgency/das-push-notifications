@@ -59,7 +59,8 @@ namespace SFA.DAS.PushNotifications.Data.Repositories
         {
             var payload = JsonConvert.SerializeObject(new
             {
-                message = "Task: " + message.Title + " needs your attention.",
+                title = message.Title,
+                message = message.Body,
                 url = "https://localhost:5003/Tasks?status=0"
             });
 

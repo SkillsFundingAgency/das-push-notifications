@@ -41,12 +41,12 @@ var host = new HostBuilder()
     var configuration = context.Configuration;
     var functionsConfig = configuration.GetSection("SFA.DAS.PushNotifications.Functions").Get<PushNotificationsFunctionsConfig>();
 
-    if (functionsConfig != null)
+    if (functionsConfig != null && functionsConfig.NServiceBusConnectionString != "UseLearningEndpoint=true")
     {
         Environment.SetEnvironmentVariable("NSERVICEBUS_LICENSE", functionsConfig.NServiceBusLicense);
         Environment.SetEnvironmentVariable("AzureWebJobsStorage", functionsConfig.NServiceBusConnectionString);
-        Environment.SetEnvironmentVariable("AzureWebJobsServiceBus", functionsConfig.NServiceBusConnectionString);
     }
+   
 })
     .UseNServiceBus(config =>
     {
@@ -56,11 +56,13 @@ var host = new HostBuilder()
         endpointConfiguration.UseSerialization<NewtonsoftJsonSerializer>();
 
 #if DEBUG
+        
         var transport = endpointConfiguration.UseTransport<LearningTransport>();
         transport.StorageDirectory(Path.Combine(Directory.GetCurrentDirectory().Substring(0, Directory.GetCurrentDirectory().IndexOf("src")),
             @"src\.learningtransport"));
         transport.Routing().RouteToEndpoint(typeof(AddWebPushSubscriptionCommand), EndpointName);
         transport.Routing().RouteToEndpoint(typeof(RemoveWebPushSubscriptionCommand), EndpointName);
+        transport.Routing().RouteToEndpoint(typeof(SendPushNotificationCommand), EndpointName);
 
 #endif
     })

@@ -5,6 +5,7 @@
         public int Id { get; set; }
         public int ApplicationId { get; set; }
         public Guid UserAccountId { get; set; }
+        public long ApprenticeshipId { get; set; }
         public int? PushProtocol { get; set; }
         public int Status { get; set; }
         public required string Endpoint { get; set; }

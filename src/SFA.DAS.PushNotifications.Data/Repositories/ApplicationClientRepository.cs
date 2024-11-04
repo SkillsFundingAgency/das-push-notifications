@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.PushNotifications.Model.Entities;
 using static SFA.DAS.PushNotifications.Model.Entities.ApplicationEnum;
@@ -9,7 +10,7 @@ public interface IApplicationClientRepository
 {
     Task<int> AddWebPushNotificationSubscription(ApplicationClient applicationClient, CancellationToken cancellationToken);
     Task RemoveWebPushNotificationSubscription(ApplicationClient applicationClient, CancellationToken cancellationToken);
-Task<List<ApplicationClient>> GetApplicationClients(int applicationId, Guid apprenticeId);
+    Task<List<ApplicationClient>> GetApplicationClients(int applicationId, long apprenticeshipId);
 
 }
 
@@ -65,12 +66,12 @@ public class ApplicationClientRepository : IApplicationClientRepository
 
     }
 
-    public async Task<List<ApplicationClient>> GetApplicationClients(int applicationId, Guid apprenticeId)
+    public async Task<List<ApplicationClient>> GetApplicationClients(int applicationId, long apprenticeshipId)
     {
-        List<ApplicationClient> appClients = _context.ApplicationClients.Where(
+        List<ApplicationClient> appClients = await _context.ApplicationClients.Where(
                                 x => x.ApplicationId == applicationId &&
-                                x.UserAccountId == apprenticeId &&
-                                x.Status == (int)ApplicationClientStatus.Active).ToList();
+                                x.ApprenticeshipId == apprenticeshipId &&
+                                x.Status == (int)ApplicationClientStatus.Active).ToListAsync();
 
         return appClients;
     }

@@ -49,6 +49,7 @@ public class PushNotificationsService : IPushNotificationsService
         var applicationClient = new ApplicationClient
         {
             UserAccountId = message.ApprenticeId,
+            ApprenticeshipId = message.ApprenticeshipId,
             Endpoint = message.Endpoint,
             SubscriptionPublicKey = message.PublicKey,
             SubscriptionAuthenticationSecret = message.AuthenticationSecret
