@@ -94,7 +94,7 @@ namespace SFA.DAS.PushNotifications.Application.UnitTests.Services
             [Frozen] SendPushNotificationCommand message)
         {
             //Arrange
-            _applicationClientRepository.Setup(x => x.GetApplicationClients(It.IsAny<int>(), It.IsAny<long>()))
+            _applicationClientRepository.Setup(x => x.GetApplicationClients(It.IsAny<int>(), It.IsAny<Guid>()))
                 .ReturnsAsync(new List<ApplicationClient> { applicationClient });
             _clientNotificationRepository.Setup(x => x.AddClientNotification(It.IsAny<int>(), It.IsAny<SendPushNotificationCommand>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(clientNotification);

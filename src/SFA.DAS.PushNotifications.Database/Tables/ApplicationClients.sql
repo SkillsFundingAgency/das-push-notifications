@@ -2,7 +2,6 @@
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
     [UserAccountId] UNIQUEIDENTIFIER NOT NULL, 
-    [ApprenticeshipId] BIGINT NULL,
     [PushProtocol]INT NULL DEFAULT 1, 
     [Status]INT NOT NULL, 
     [EndPoint] NVARCHAR(255) NOT NULL, 

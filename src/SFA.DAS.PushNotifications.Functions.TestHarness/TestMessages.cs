@@ -25,22 +25,22 @@ namespace SFA.DAS.PushNotifications.Functions
                     case ConsoleKey.A:
                         var testAdd1 = new AddWebPushSubscriptionCommand()
                         {
-                            ApprenticeId = Guid.NewGuid(),
+                            ApprenticeAccountIdentifier = Guid.NewGuid(),
                             Endpoint = "a",
                             PublicKey = "b",
                             AuthenticationSecret = "c"
                         };
-                        log.Info($"Adding AddSubscription command, ApprenticeId = {testAdd1.ApprenticeId}");
+                        log.Info($"Adding AddSubscription command, ApprenticeId = {testAdd1.ApprenticeAccountIdentifier}");
                         await endpointInstance.Send(testAdd1);
 
                         var testAdd2 = new AddWebPushSubscriptionCommand()
                         {
-                            ApprenticeId = Guid.NewGuid(),
+                            ApprenticeAccountIdentifier = Guid.NewGuid(),
                             Endpoint = "x",
                             PublicKey = "b",
                             AuthenticationSecret = "c"
                         };
-                        log.Info($"Adding AddSubscription command, ApprenticeId = {testAdd2.ApprenticeId}");
+                        log.Info($"Adding AddSubscription command, ApprenticeId = {testAdd2.ApprenticeAccountIdentifier}");
                         await endpointInstance.Send(testAdd2);
                         break;
 
@@ -57,7 +57,7 @@ namespace SFA.DAS.PushNotifications.Functions
                     case ConsoleKey.C:
                         var testSend1 = new SendPushNotificationCommand()
                         {
-                            ApprenticeAccountIdentifier = 1234,
+                            ApprenticeAccountIdentifier = Guid.NewGuid(),
                             Title = "Test Notification",
                             Body = "This is a test notification"
                         };

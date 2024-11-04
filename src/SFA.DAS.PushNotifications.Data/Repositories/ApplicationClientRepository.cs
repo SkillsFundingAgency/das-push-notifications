@@ -10,7 +10,7 @@ public interface IApplicationClientRepository
 {
     Task<int> AddWebPushNotificationSubscription(ApplicationClient applicationClient, CancellationToken cancellationToken);
     Task RemoveWebPushNotificationSubscription(ApplicationClient applicationClient, CancellationToken cancellationToken);
-    Task<List<ApplicationClient>> GetApplicationClients(int applicationId, long apprenticeshipId);
+    Task<List<ApplicationClient>> GetApplicationClients(int applicationId, Guid apprenticeId);
 
 }
 
@@ -66,11 +66,11 @@ public class ApplicationClientRepository : IApplicationClientRepository
 
     }
 
-    public async Task<List<ApplicationClient>> GetApplicationClients(int applicationId, long apprenticeshipId)
+    public async Task<List<ApplicationClient>> GetApplicationClients(int applicationId, Guid apprenticeId)
     {
         List<ApplicationClient> appClients = await _context.ApplicationClients.Where(
                                 x => x.ApplicationId == applicationId &&
-                                x.ApprenticeshipId == apprenticeshipId &&
+                                x.UserAccountId == apprenticeId &&
                                 x.Status == (int)ApplicationClientStatus.Active).ToListAsync();
 
         return appClients;

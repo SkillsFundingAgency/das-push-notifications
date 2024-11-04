@@ -42,14 +42,13 @@ public class PushNotificationsService : IPushNotificationsService
 
         if(string.IsNullOrEmpty(message.Endpoint))
         {
-            _logger.LogError("Endpoint is null or empty for apprenticeId {ApprenticeId}", message.ApprenticeId);
+            _logger.LogError("Endpoint is null or empty for apprenticeId {ApprenticeId}", message.ApprenticeAccountIdentifier);
             throw new ArgumentException("Endpoint is null or empty");
         }
       
         var applicationClient = new ApplicationClient
         {
-            UserAccountId = message.ApprenticeId,
-            ApprenticeshipId = message.ApprenticeshipId,
+            UserAccountId = message.ApprenticeAccountIdentifier,
             Endpoint = message.Endpoint,
             SubscriptionPublicKey = message.PublicKey,
             SubscriptionAuthenticationSecret = message.AuthenticationSecret

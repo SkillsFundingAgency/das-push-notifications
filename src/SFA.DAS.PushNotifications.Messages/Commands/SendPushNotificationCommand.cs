@@ -2,7 +2,7 @@
 {
     public class SendPushNotificationCommand : ICommand
     {
-        public long ApprenticeAccountIdentifier { get; set; }
+        public Guid ApprenticeAccountIdentifier { get; set; }
         public string Title { get; set; } = null!;
         public string Body { get; set; } = null!;
     }
