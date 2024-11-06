@@ -48,7 +48,7 @@ namespace SFA.DAS.PushNotifications.Functions
                         var testRemove1 = new RemoveWebPushSubscriptionCommand()
                         {
                             ApprenticeId = Guid.NewGuid(),
-                            Endpoint = "http://myendpoint/test"
+                            Endpoint = "https://myendpoint/test"
                         };
                         log.Info($"Adding RemoveSubscription command, ApprenticeId = {testRemove1.ApprenticeId}");
                         await endpointInstance.Send(testRemove1);

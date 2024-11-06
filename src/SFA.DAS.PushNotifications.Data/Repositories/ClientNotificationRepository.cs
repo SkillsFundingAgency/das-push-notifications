@@ -47,7 +47,7 @@ namespace SFA.DAS.PushNotifications.Data.Repositories
 
         public async Task<ClientNotification> UpdateClientNotification(ClientNotification clientNotification, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Updating clientNotification for {Id}", clientNotification.Id);
+            _logger.LogInformation("Updating client notification for {Id}", clientNotification.Id);
             _context.ClientNotification.Update(clientNotification);
             await _context.SaveChangesAsync(cancellationToken);
             _logger.LogInformation("Updated client notification for {Id}", clientNotification.Id);

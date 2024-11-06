@@ -8,6 +8,7 @@ using SFA.DAS.PushNotifications.Data.Repositories;
 using SFA.DAS.PushNotifications.Messages.Commands;
 using SFA.DAS.PushNotifications.Model.Entities;
 using SFA.DAS.Testing.AutoFixture;
+using WebPush;
 
 namespace SFA.DAS.PushNotifications.Application.UnitTests.Services
 {
@@ -111,6 +112,53 @@ namespace SFA.DAS.PushNotifications.Application.UnitTests.Services
                     It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Sending notification for Client Notification Id")),
                     It.IsAny<Exception>(),
                     It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)));
+        }
+
+        [Test, MoqAutoData]
+        public void SendNotification_InvalidSubscriptionEncoding_ReturnsError(
+           [Frozen] ClientNotification clientNotification,
+           [Frozen] PushSubscription subscription
+           )
+        {
+            //Arrange
+            _configuration.Setup(c => c["SFA.DAS.PushNotifications.Functions:VapidKeys:PublicKey"]).Returns("testpublickey");
+            _configuration.Setup(c => c["SFA.DAS.PushNotifications.Functions:VapidKeys:PrivateKey"]).Returns("testprivatekey");
+
+            string payload = "{\"title\":\"Test\",\"message\":\"Test message\"}";
+            subscription.Endpoint = "https://example.com/fcm/send/invalidendpoint";
+            subscription.P256DH = "invalidp256dh";
+            subscription.Auth = "invalidauth";
+
+            // Act
+            var result = _service.SendNotification(subscription, payload);
+
+            // Assert
+            result.Result.Should().Contain("The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters.");
+            _logger.Verify(
+                x => x.Log(
+                    It.Is<LogLevel>(l => l == LogLevel.Error),
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Error sending notification: ")),
+                    It.IsAny<Exception>(),
+                    It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)));
+        }
+
+
+        [Test, MoqAutoData]
+        public void SendNotification_NoVapidKeys_ReturnsError(
+           [Frozen] ClientNotification clientNotification,
+           [Frozen] PushSubscription subscription
+           )
+        {
+            //Arrange
+            string payload = "{\"title\":\"Test\",\"message\":\"Test message\"}";
+            clientNotification.Status = (int)ClientNotificationStatus.Pending;
+
+            // Act
+            var result = _service.SendNotification(subscription, payload);
+
+            // Assert
+            result.Result.Should().Be("No Vapid Keys Found");
         }
     }
 }

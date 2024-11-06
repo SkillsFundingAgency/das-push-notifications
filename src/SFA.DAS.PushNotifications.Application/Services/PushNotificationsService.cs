@@ -26,7 +26,8 @@ public class PushNotificationsService : IPushNotificationsService
         IApplicationClientRepository applicationClientRepository,
         IClientNotificationRepository clientNotificationRepository,
         ILogger<PushNotificationsService> logger,
-        IConfiguration configuration)
+        IConfiguration configuration
+        )
     {
         _applicationClientRepository = applicationClientRepository;
         _clientNotificationRepository = clientNotificationRepository;
@@ -125,7 +126,7 @@ public class PushNotificationsService : IPushNotificationsService
         return subscription;
     }
 
-    private async Task<string> SendNotification(PushSubscription subscription, string payload)
+    public async Task<string> SendNotification(PushSubscription subscription, string payload)
     {
         var publicKey = _configuration["SFA.DAS.PushNotifications.Functions:VapidKeys:PublicKey"];
         var privateKey = _configuration["SFA.DAS.PushNotifications.Functions:VapidKeys:PrivateKey"];
