@@ -25,22 +25,22 @@ namespace SFA.DAS.PushNotifications.Functions
                     case ConsoleKey.A:
                         var testAdd1 = new AddWebPushSubscriptionCommand()
                         {
-                            ApprenticeAccountIdentifier = Guid.NewGuid(),
+                            ApprenticeId = Guid.NewGuid(),
                             Endpoint = "a",
                             PublicKey = "b",
                             AuthenticationSecret = "c"
                         };
-                        log.Info($"Adding AddSubscription command, ApprenticeId = {testAdd1.ApprenticeAccountIdentifier}");
+                        log.Info($"Adding AddSubscription command, ApprenticeId = {testAdd1.ApprenticeId}");
                         await endpointInstance.Send(testAdd1);
 
                         var testAdd2 = new AddWebPushSubscriptionCommand()
                         {
-                            ApprenticeAccountIdentifier = Guid.NewGuid(),
+                            ApprenticeId = Guid.NewGuid(),
                             Endpoint = "x",
                             PublicKey = "b",
                             AuthenticationSecret = "c"
                         };
-                        log.Info($"Adding AddSubscription command, ApprenticeId = {testAdd2.ApprenticeAccountIdentifier}");
+                        log.Info($"Adding AddSubscription command, ApprenticeId = {testAdd2.ApprenticeId}");
                         await endpointInstance.Send(testAdd2);
                         break;
 

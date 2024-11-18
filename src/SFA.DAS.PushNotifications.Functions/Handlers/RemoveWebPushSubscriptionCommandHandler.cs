@@ -17,6 +17,7 @@ namespace SFA.DAS.PushNotifications.Functions.Handlers
 
         public async Task Handle(RemoveWebPushSubscriptionCommand message, IMessageHandlerContext context)
         {
+            
             if (message != null)
             {
                 _logger.LogInformation("Handle RemoveWebPushSubscriptionCommand for {Endpoint}", message.Endpoint);

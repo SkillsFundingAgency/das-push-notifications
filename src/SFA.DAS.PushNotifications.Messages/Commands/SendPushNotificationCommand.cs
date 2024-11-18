@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.PushNotifications.Messages.Commands
 {
-    public class SendPushNotificationCommand : ICommand
+    public class SendPushNotificationCommand
     {
         public Guid ApprenticeAccountIdentifier { get; set; }
         public string Title { get; set; } = null!;
