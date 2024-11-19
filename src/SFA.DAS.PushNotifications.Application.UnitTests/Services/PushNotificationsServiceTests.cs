@@ -121,8 +121,8 @@ namespace SFA.DAS.PushNotifications.Application.UnitTests.Services
            )
         {
             //Arrange
-            _configuration.Setup(c => c["SFA.DAS.PushNotifications.Functions:VapidKeys:PublicKey"]).Returns("testpublickey");
-            _configuration.Setup(c => c["SFA.DAS.PushNotifications.Functions:VapidKeys:PrivateKey"]).Returns("testprivatekey");
+            _configuration.Setup(c => c["SFA.DAS.PushNotifications.Functions:VapidPublicKey"]).Returns("testpublickey");
+            _configuration.Setup(c => c["SFA.DAS.PushNotifications.Functions:VapidPrivateKey"]).Returns("testprivatekey");
 
             string payload = "{\"title\":\"Test\",\"message\":\"Test message\"}";
             subscription.Endpoint = "https://example.com/fcm/send/invalidendpoint";
