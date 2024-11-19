@@ -132,7 +132,7 @@ public class PushNotificationsService : IPushNotificationsService
         var privateKey = _configuration["SFA.DAS.PushNotifications.Functions:VapidPrivateKey"];
 
         var vapidDetails = new VapidDetails(
-            "mailto:cathy.groom@education.gov.uk",
+            "MyApprenticeshipApp",
             publicKey, privateKey
         );
 
