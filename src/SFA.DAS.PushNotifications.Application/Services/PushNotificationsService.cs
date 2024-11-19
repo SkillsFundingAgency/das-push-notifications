@@ -128,8 +128,8 @@ public class PushNotificationsService : IPushNotificationsService
 
     public async Task<string> SendNotification(PushSubscription subscription, string payload)
     {
-        var publicKey = _configuration["SFA.DAS.PushNotifications.Functions:VapidKeys:PublicKey"];
-        var privateKey = _configuration["SFA.DAS.PushNotifications.Functions:VapidKeys:PrivateKey"];
+        var publicKey = _configuration["SFA.DAS.PushNotifications.Functions:VapidPublicKey"];
+        var privateKey = _configuration["SFA.DAS.PushNotifications.Functions:VapidPrivateKey"];
 
         var vapidDetails = new VapidDetails(
             "mailto:cathy.groom@education.gov.uk",
