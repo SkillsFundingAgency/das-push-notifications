@@ -35,7 +35,7 @@ namespace SFA.DAS.PushNotifications.Functions.UnitTests.CommandHandlers
             _service.Verify(x => x.RemoveWebPushNotificationSubscription(message));
             _logger.Verify(x => x.Log(
                LogLevel.Information, It.IsAny<EventId>(),
-               It.Is<It.IsAnyType>((v, t) => v.ToString().Contains(message.Endpoint)), null,
+               It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Handle RemoveWebPushSubscriptionCommand for")), null,
                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()));
         }
 
