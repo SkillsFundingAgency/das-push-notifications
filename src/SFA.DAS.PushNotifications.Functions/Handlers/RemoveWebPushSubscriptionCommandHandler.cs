@@ -20,9 +20,9 @@ namespace SFA.DAS.PushNotifications.Functions.Handlers
             
             if (message != null)
             {
-                _logger.LogInformation("Handle RemoveWebPushSubscriptionCommand for {Endpoint}", message.Endpoint);
+                _logger.LogInformation("Handle RemoveWebPushSubscriptionCommand for {ApprenticeId}", message.ApprenticeId);
                 await _pushNotificationsService.RemoveWebPushNotificationSubscription(message);
-                _logger.LogInformation("Finished handling RemoveWebPushSubscriptionCommandHandler for {Endpoint}", message.Endpoint);
+                _logger.LogInformation("Finished handling RemoveWebPushSubscriptionCommandHandler for {ApprenticeId}", message.ApprenticeId);
             }
             else
             {

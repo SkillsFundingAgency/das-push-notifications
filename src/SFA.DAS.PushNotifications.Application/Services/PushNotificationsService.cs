@@ -39,7 +39,7 @@ public class PushNotificationsService : IPushNotificationsService
     {
         CancellationToken cancellationToken = CancellationToken.None;
 
-        _logger.LogInformation("Adding subscription for {Endpoint}", message.Endpoint);
+        _logger.LogInformation("Adding subscription for {ApprenticeId}", message.ApprenticeId);
 
         if(string.IsNullOrEmpty(message.Endpoint))
         {
@@ -61,7 +61,7 @@ public class PushNotificationsService : IPushNotificationsService
 
     public async Task RemoveWebPushNotificationSubscription(RemoveWebPushSubscriptionCommand message)
     {
-        _logger.LogInformation("Unsubscribing to push notifications for {Endpoint}", message.Endpoint);
+        _logger.LogInformation("Unsubscribing to push notifications for {ApprenticeId}", message.ApprenticeId);
 
         CancellationToken cancellationToken = CancellationToken.None;
         var applicationClient = new ApplicationClient 
@@ -72,7 +72,7 @@ public class PushNotificationsService : IPushNotificationsService
 
         await _applicationClientRepository.RemoveWebPushNotificationSubscription(applicationClient, cancellationToken);
 
-        _logger.LogInformation("Unsubscribed to push notifications for {Endpoint}", applicationClient.Endpoint);
+        _logger.LogInformation("Unsubscribed to push notifications for {ApprenticeId}", applicationClient.UserAccountId);
     }
 
     public async Task ProcessPushNotificationMessage(SendPushNotificationCommand message)
@@ -130,9 +130,10 @@ public class PushNotificationsService : IPushNotificationsService
     {
         var publicKey = _configuration["SFA.DAS.PushNotifications.Functions:VapidPublicKey"];
         var privateKey = _configuration["SFA.DAS.PushNotifications.Functions:VapidPrivateKey"];
+        var contactEmail = _configuration["SFA.DAS.PushNotifications.Functions:ContactEmail"];
 
         var vapidDetails = new VapidDetails(
-            "MyApprenticeshipApp",
+           contactEmail,
             publicKey, privateKey
         );
 

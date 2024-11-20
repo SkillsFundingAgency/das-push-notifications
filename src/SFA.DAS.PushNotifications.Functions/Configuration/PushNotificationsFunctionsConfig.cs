@@ -11,5 +11,6 @@ namespace SFA.DAS.PushNotifications.Configuration
         public string NServiceBusEndpointName { get; set; } = null!;
         public string VapidPublicKey { get; set; } = null!;
         public string VapidPrivateKey { get; set; } = null!;
+        public string ContactEmail { get; set; } = null!;
     }
 }

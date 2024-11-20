@@ -28,7 +28,7 @@ public class ApplicationClientRepository : IApplicationClientRepository
     public async Task<int> AddWebPushNotificationSubscription(ApplicationClient applicationClient, CancellationToken cancellationToken)
     {
         
-        _logger.LogInformation("Adding push notification subscription for {Endpoint}", applicationClient.Endpoint);
+        _logger.LogInformation("Adding push notification subscription for {ApprenticeId}", applicationClient.UserAccountId);
 
         var appClients = _context.ApplicationClients.Where(x => x.Endpoint == applicationClient.Endpoint);
         if (appClients.Any())
@@ -45,14 +45,14 @@ public class ApplicationClientRepository : IApplicationClientRepository
         _context.ApplicationClients.Add(applicationClient);
 
         await _context.SaveChangesAsync(cancellationToken);
-        _logger.LogInformation("Added push notification subscription for {Endpoint}", applicationClient.Endpoint);
+        _logger.LogInformation("Added push notification subscription for {ApprenticeId}", applicationClient.UserAccountId);
 
         return applicationClient.Id;
     }
 
     public async Task RemoveWebPushNotificationSubscription(ApplicationClient applicationClient, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Removing push notification subscription for {Endpoint}", applicationClient.Endpoint);
+        _logger.LogInformation("Removing push notification subscription for {ApprenticeId}", applicationClient.UserAccountId);
         var appClient = _context.ApplicationClients.FirstOrDefault(x => x.Endpoint == applicationClient.Endpoint);
         if (appClient == null)
         {
@@ -62,7 +62,7 @@ public class ApplicationClientRepository : IApplicationClientRepository
         appClient.LastUpdatedOn = DateTime.UtcNow;
         _context.ApplicationClients.Update(appClient);
         await _context.SaveChangesAsync(cancellationToken);
-        _logger.LogInformation("Removed push notification subscription for {Endpoint}", applicationClient.Endpoint);
+        _logger.LogInformation("Removed push notification subscription for {ApprenticeId}", applicationClient.UserAccountId);
 
     }
 
