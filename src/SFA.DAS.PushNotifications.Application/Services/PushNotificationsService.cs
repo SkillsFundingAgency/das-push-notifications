@@ -132,6 +132,8 @@ public class PushNotificationsService : IPushNotificationsService
         var privateKey = _configuration["SFA.DAS.PushNotifications.Functions:VapidPrivateKey"];
         var contactEmail = _configuration["SFA.DAS.PushNotifications.Functions:ContactEmail"];
 
+        if (string.IsNullOrEmpty(contactEmail)){ contactEmail = "mailto:test@test.com"; }
+
         var vapidDetails = new VapidDetails(
            contactEmail,
             publicKey, privateKey
