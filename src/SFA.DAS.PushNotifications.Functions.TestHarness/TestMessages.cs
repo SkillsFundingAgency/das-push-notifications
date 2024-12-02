@@ -12,7 +12,11 @@ namespace SFA.DAS.PushNotifications.Functions
         {
             while (true)
             {
-                log.Info("Press 'A' to add test messages, or 'Q' to quit.");
+               
+                Console.WriteLine("Press 'A' for AddWebPushSubscription");
+                Console.WriteLine("Press 'B' for RemoveWebSubscription");
+                Console.WriteLine("Press 'C' for SendPushNotification");
+                Console.WriteLine("Press 'Q' to quit");
                 var key = Console.ReadKey();
                 Console.WriteLine();
 
@@ -38,6 +42,27 @@ namespace SFA.DAS.PushNotifications.Functions
                         };
                         log.Info($"Adding AddSubscription command, ApprenticeId = {testAdd2.ApprenticeId}");
                         await endpointInstance.Send(testAdd2);
+                        break;
+
+                    case ConsoleKey.B:
+                        var testRemove1 = new RemoveWebPushSubscriptionCommand()
+                        {
+                            ApprenticeId = Guid.NewGuid(),
+                            Endpoint = "https://myendpoint/test"
+                        };
+                        log.Info($"Adding RemoveSubscription command, ApprenticeId = {testRemove1.ApprenticeId}");
+                        await endpointInstance.Send(testRemove1);
+                        break;
+
+                    case ConsoleKey.C:
+                        var testSend1 = new SendPushNotificationCommand()
+                        {
+                            ApprenticeAccountIdentifier = Guid.NewGuid(),
+                            Title = "Test Notification",
+                            Body = "This is a test notification"
+                        };
+                        log.Info($"Adding SendPushNotification command, ApprenticeId = {testSend1.ApprenticeAccountIdentifier}");
+                        await endpointInstance.Send(testSend1);
                         break;
 
                     case ConsoleKey.Q:

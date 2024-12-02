@@ -48,6 +48,7 @@ public static class AddPushNotificationsDataContextExtension
 
         services.AddScoped<IPushNotificationsDataContext, PushNotificationsDataContext>(provider => provider.GetService<PushNotificationsDataContext>()!);
         services.AddScoped<IApplicationClientRepository, ApplicationClientRepository>();
+        services.AddScoped<IClientNotificationRepository, ClientNotificationRepository>();
 
         return services;
     }

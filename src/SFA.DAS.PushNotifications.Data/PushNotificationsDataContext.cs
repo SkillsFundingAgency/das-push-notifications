@@ -9,6 +9,7 @@ namespace SFA.DAS.PushNotifications.Data
     {
         public PushNotificationsDataContext(DbContextOptions<PushNotificationsDataContext> options) : base(options) { }
         public DbSet<ApplicationClient> ApplicationClients => Set<ApplicationClient>();
+        public DbSet<ClientNotification> ClientNotification => Set<ClientNotification>();
        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -16,6 +17,9 @@ namespace SFA.DAS.PushNotifications.Data
             modelBuilder.Entity<ApplicationClient>()
            .HasIndex(e => e.Endpoint)
            .IsUnique();
+            modelBuilder.Entity<ClientNotification>()
+                .HasIndex(e => e.Id)
+                .IsUnique();
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(PushNotificationsDataContext).Assembly);
         }
     }

@@ -23,7 +23,7 @@ internal static class Program
         var endpointConfiguration = new EndpointConfiguration(EndpointName);
         endpointConfiguration.SendFailedMessagesTo($"{EndpointName}-errors");
         endpointConfiguration.UseSerialization<NewtonsoftJsonSerializer>();
-        endpointConfiguration.SendOnly();
+        //endpointConfiguration.SendOnly();
 
         var transport = endpointConfiguration.UseTransport<LearningTransport>();
             transport.StorageDirectory(
@@ -31,12 +31,12 @@ internal static class Program
                     Directory.GetCurrentDirectory()
                         .Substring(0, Directory.GetCurrentDirectory().IndexOf("src")),
                     @"src\.learningtransport"));
-            var routing = transport.Routing();
+        var routing = transport.Routing();
 
-            routing.RouteToEndpoint(typeof(AddWebPushSubscriptionCommand), "SFA.DAS.PushNotifications");
-            routing.RouteToEndpoint(typeof(RemoveWebPushSubscriptionCommand), "SFA.DAS.PushNotifications");
+        routing.RouteToEndpoint(typeof(AddWebPushSubscriptionCommand), EndpointName);
+        routing.RouteToEndpoint(typeof(RemoveWebPushSubscriptionCommand), EndpointName);
+        routing.RouteToEndpoint(typeof(SendPushNotificationCommand), EndpointName);
 
-        
 
         var endpointInstance = await Endpoint.Start(endpointConfiguration);
 

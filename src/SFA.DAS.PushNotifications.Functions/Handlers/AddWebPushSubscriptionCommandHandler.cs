@@ -18,7 +18,7 @@ namespace SFA.DAS.PushNotifications.Functions.Handlers
         {
             if(message != null)
             {
-                _logger.LogInformation("Handle AddWebPushSubscriptionCommand for {Endpoint}", message.Endpoint);
+                _logger.LogInformation("Handle AddWebPushSubscriptionCommand for {ApprenticeId}", message.ApprenticeId);
                 await _pushNotificationsService.AddWebPushNotificationSubscription(message);
             }
             else

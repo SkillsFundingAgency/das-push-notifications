@@ -5,9 +5,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.ApplicationInsights;
 using SFA.DAS.PushNotifications.Application.Services;
+using SFA.DAS.PushNotifications.Configuration;
 using SFA.DAS.PushNotifications.Data.Extensions;
 using SFA.DAS.PushNotifications.Data.Repositories;
-using SFA.DAS.PushNotifications.Functions.Configuration;
 using SFA.DAS.PushNotifications.Functions.StartupExtensions;
 using SFA.DAS.PushNotifications.Messages.Commands;
 using System.Diagnostics.CodeAnalysis;
@@ -36,15 +36,17 @@ var host = new HostBuilder()
     .ConfigureFunctionsApplicationInsights()
     .AddTransient<IPushNotificationsService, PushNotificationsService>()
     .AddTransient<IApplicationClientRepository, ApplicationClientRepository>()
+    .AddTransient<IClientNotificationRepository, ClientNotificationRepository>()
     .AddPushNotificationsDataContext(context.Configuration);
     var configuration = context.Configuration;
-    var functionsConfig = configuration.GetSection("SFA.DAS.PushNotifications.Functions").Get<PushNotificationsFunctions>();
+    var functionsConfig = configuration.GetSection("SFA.DAS.PushNotifications.Functions").Get<PushNotificationsFunctionsConfig>();
 
-    if (functionsConfig != null)
+    if (functionsConfig != null && functionsConfig.NServiceBusConnectionString != "UseLearningEndpoint=true")
     {
         Environment.SetEnvironmentVariable("NSERVICEBUS_LICENSE", functionsConfig.NServiceBusLicense);
         Environment.SetEnvironmentVariable("AzureWebJobsStorage", functionsConfig.NServiceBusConnectionString);
     }
+   
 })
     .UseNServiceBus(config =>
     {
@@ -54,11 +56,13 @@ var host = new HostBuilder()
         endpointConfiguration.UseSerialization<NewtonsoftJsonSerializer>();
 
 #if DEBUG
+        
         var transport = endpointConfiguration.UseTransport<LearningTransport>();
         transport.StorageDirectory(Path.Combine(Directory.GetCurrentDirectory().Substring(0, Directory.GetCurrentDirectory().IndexOf("src")),
             @"src\.learningtransport"));
         transport.Routing().RouteToEndpoint(typeof(AddWebPushSubscriptionCommand), EndpointName);
         transport.Routing().RouteToEndpoint(typeof(RemoveWebPushSubscriptionCommand), EndpointName);
+        transport.Routing().RouteToEndpoint(typeof(SendPushNotificationCommand), EndpointName);
 
 #endif
     })
