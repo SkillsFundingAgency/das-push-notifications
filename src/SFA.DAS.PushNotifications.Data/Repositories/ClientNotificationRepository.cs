@@ -25,7 +25,7 @@ namespace SFA.DAS.PushNotifications.Data.Repositories
         public async Task<ClientNotification> AddClientNotification(int applicationClientId, SendPushNotificationCommand message, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Adding clientNotification for applicationClientId {Id}", applicationClientId);
-            string payload = await PayloadContents(message);
+            string payload = PayloadContents(message);
             ClientNotification clientNotification = new()
             {
                 Status = (int)ClientNotificationStatus.Pending,
@@ -55,13 +55,12 @@ namespace SFA.DAS.PushNotifications.Data.Repositories
             return clientNotification;
         }
 
-        private async Task<string> PayloadContents(SendPushNotificationCommand message)
+        private string PayloadContents(SendPushNotificationCommand message)
         {
             var payload = JsonConvert.SerializeObject(new
             {
                 title = message.Title,
-                message = message.Body,
-                url = "https://localhost:5003/Tasks?status=0"
+                message = message.Body
             });
 
             return payload;
