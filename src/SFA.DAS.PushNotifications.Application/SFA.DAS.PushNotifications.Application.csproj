@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="WebPush" Version="1.0.12" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.PushNotifications.Data\SFA.DAS.PushNotifications.Data.csproj" />
     <ProjectReference Include="..\SFA.DAS.PushNotifications.Messages\SFA.DAS.PushNotifications.Messages.csproj" />
     <ProjectReference Include="..\SFA.DAS.PushNotifications.Model\SFA.DAS.PushNotifications.Model.csproj" />

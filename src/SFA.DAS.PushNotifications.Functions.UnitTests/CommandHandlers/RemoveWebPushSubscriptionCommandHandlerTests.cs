@@ -6,6 +6,7 @@ using NUnit.Framework.Internal;
 using SFA.DAS.PushNotifications.Application.Services;
 using SFA.DAS.PushNotifications.Functions.Handlers;
 using SFA.DAS.PushNotifications.Messages.Commands;
+using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.PushNotifications.Functions.UnitTests.CommandHandlers
 {
@@ -13,30 +14,28 @@ namespace SFA.DAS.PushNotifications.Functions.UnitTests.CommandHandlers
     public class RemoveWebPushSubscriptionCommandHandlerTests
     {
         private RemoveWebPushSubscriptionCommandHandler _handler;
-        private RemoveWebPushSubscriptionCommand _event;
         private Mock<IPushNotificationsService> _service;
         private Mock<ILogger<RemoveWebPushSubscriptionCommandHandler>> _logger;
         private TestableMessageHandlerContext _context;
-        private readonly Fixture _fixture = new();
 
         [SetUp]
         public void Setup()
         {
             _service = new Mock<IPushNotificationsService>();
-            _event = _fixture.Create<RemoveWebPushSubscriptionCommand>();
             _logger = new Mock<ILogger<RemoveWebPushSubscriptionCommandHandler>>();
             _handler = new RemoveWebPushSubscriptionCommandHandler(_service.Object, _logger.Object);
             _context = new TestableMessageHandlerContext();
         }
 
-        [Test]
-        public async Task Run_Invokes_RemoveWebPushSubscription_Command()
+        [Test, MoqAutoData]
+        public async Task Run_Invokes_RemoveWebPushSubscription_Command(
+            RemoveWebPushSubscriptionCommand message)
         {
-            await _handler.Handle(_event, _context);
-            _service.Verify(x => x.RemoveWebPushNotificationSubscription(_event));
+            await _handler.Handle(message, _context);
+            _service.Verify(x => x.RemoveWebPushNotificationSubscription(message));
             _logger.Verify(x => x.Log(
                LogLevel.Information, It.IsAny<EventId>(),
-               It.Is<It.IsAnyType>((v, t) => v.ToString().Contains(_event.Endpoint)), null,
+               It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Handle RemoveWebPushSubscriptionCommand for")), null,
                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()));
         }
 

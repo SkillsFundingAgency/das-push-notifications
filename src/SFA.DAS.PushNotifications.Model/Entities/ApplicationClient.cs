@@ -15,4 +15,13 @@
         public DateTime? ExpiryDate { get; set; }
         public DateTime? LastUpdatedOn { get; set; }
     }
+
+    [Flags]
+    public enum ApplicationClientStatus
+    {
+        Active = 1,
+        Inactive = 2,
+        Expired = 3,
+        Unsubscribed = 4
+    }
 }

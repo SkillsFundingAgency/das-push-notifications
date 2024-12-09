@@ -38,7 +38,7 @@ namespace SFA.DAS.PushNotifications.Functions.UnitTests.CommandHandlers
             _service.Verify(x => x.AddWebPushNotificationSubscription(_event));
             _logger.Verify(x => x.Log(
                LogLevel.Information, It.IsAny<EventId>(), 
-               It.Is<It.IsAnyType>((v, t) => v.ToString().Contains(_event.Endpoint)), null, 
+               It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Handle AddWebPushSubscriptionCommand for ")), null, 
                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()),
                Times.Once());
         }

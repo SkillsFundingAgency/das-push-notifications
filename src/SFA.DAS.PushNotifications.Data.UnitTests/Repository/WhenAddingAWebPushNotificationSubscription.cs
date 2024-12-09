@@ -5,8 +5,8 @@ using Moq;
 using NUnit.Framework.Internal;
 using SFA.DAS.PushNotifications.Data.Repositories;
 using SFA.DAS.PushNotifications.Data.UnitTests.DatabaseMock;
+using SFA.DAS.PushNotifications.Model.Entities;
 using SFA.DAS.Testing.AutoFixture;
-using static SFA.DAS.PushNotifications.Model.Entities.ApplicationClientStatusEnum;
 using ApplicationClient = SFA.DAS.PushNotifications.Model.Entities.ApplicationClient;
 
 namespace SFA.DAS.PushNotifications.Data.UnitTests.Repository
@@ -35,8 +35,8 @@ namespace SFA.DAS.PushNotifications.Data.UnitTests.Repository
             //Assert
             mockContext.Verify(context => context.SaveChangesAsync(cancellationToken), Times.Once);
             applicationClient.Status.Should().Be((int)ApplicationClientStatus.Active);
-            logger.Verify(x => x.Log(LogLevel.Information,It.IsAny<EventId>(),It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Adding push notification subscription for Endpoint")), null,(Func<It.IsAnyType, Exception, string>)It.IsAny<object>()));
-            logger.Verify(x => x.Log(LogLevel.Information, It.IsAny<EventId>(), It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Added push notification subscription for Endpoint")), null, (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()));
+            logger.Verify(x => x.Log(LogLevel.Information,It.IsAny<EventId>(),It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Adding push notification subscription for " + applicationClient.UserAccountId)), null,(Func<It.IsAnyType, Exception, string>)It.IsAny<object>()));
+            logger.Verify(x => x.Log(LogLevel.Information, It.IsAny<EventId>(), It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Added push notification subscription for " + applicationClient.UserAccountId)), null, (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()));
 
         }
 
@@ -46,6 +46,7 @@ namespace SFA.DAS.PushNotifications.Data.UnitTests.Repository
             [Frozen] Mock<ILogger<ApplicationClientRepository>> logger,
             ApplicationClientRepository repository)
         {
+            //Arrange
             List<ApplicationClient> applicationClients = new();
             ApplicationClient applicationClient = new()
             {
