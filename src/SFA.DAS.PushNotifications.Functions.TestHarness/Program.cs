@@ -16,21 +16,26 @@ internal static class Program
     public static async Task Main()
     {
         var builder = new ConfigurationBuilder()
-            .AddAzureTableStorage(ConfigName);
+            .AddAzureTableStorage(ConfigName)
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddEnvironmentVariables()
+            .AddJsonFile("local.settings.json", optional: true);
 
-        builder.Build();
+        var config = builder.Build();
 
         var endpointConfiguration = new EndpointConfiguration(EndpointName);
         endpointConfiguration.SendFailedMessagesTo($"{EndpointName}-errors");
         endpointConfiguration.UseSerialization<NewtonsoftJsonSerializer>();
-        //endpointConfiguration.SendOnly();
 
-        var transport = endpointConfiguration.UseTransport<LearningTransport>();
-            transport.StorageDirectory(
-                Path.Combine(
-                    Directory.GetCurrentDirectory()
-                        .Substring(0, Directory.GetCurrentDirectory().IndexOf("src")),
-                    @"src\.learningtransport"));
+        endpointConfiguration.Conventions()
+            .DefiningCommandsAs(t => t.Namespace != null && t.Namespace.EndsWith("Commands"))
+            .DefiningEventsAs(t => t.Namespace != null && t.Namespace.EndsWith("Events"));
+        endpointConfiguration.SendOnly();
+
+        var transport = endpointConfiguration.UseTransport<AzureServiceBusTransport>();
+        transport.Routing().RouteToEndpoint(typeof(SendPushNotificationCommand), EndpointName);
+        var connectionString = config["Values:AzureWebJobsServiceBus"];
+        transport.ConnectionString(connectionString);
         var routing = transport.Routing();
 
         routing.RouteToEndpoint(typeof(AddWebPushSubscriptionCommand), EndpointName);
