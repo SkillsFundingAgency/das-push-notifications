@@ -9,10 +9,7 @@ using SFA.DAS.PushNotifications.Configuration;
 using SFA.DAS.PushNotifications.Data.Extensions;
 using SFA.DAS.PushNotifications.Data.Repositories;
 using SFA.DAS.PushNotifications.Functions.StartupExtensions;
-using SFA.DAS.PushNotifications.Messages.Commands;
-using System.Diagnostics.CodeAnalysis;
 
-[assembly: ExcludeFromCodeCoverage]
 [assembly: NServiceBusTriggerFunction("SFA.DAS.PushNotifications")]
 
 const string EndpointName = "SFA.DAS.PushNotifications";
@@ -54,17 +51,6 @@ var host = new HostBuilder()
         endpointConfiguration.EnableInstallers();
         endpointConfiguration.SendFailedMessagesTo(ErrorEndpointName);
         endpointConfiguration.UseSerialization<NewtonsoftJsonSerializer>();
-
-#if DEBUG
-        
-        var transport = endpointConfiguration.UseTransport<LearningTransport>();
-        transport.StorageDirectory(Path.Combine(Directory.GetCurrentDirectory().Substring(0, Directory.GetCurrentDirectory().IndexOf("src")),
-            @"src\.learningtransport"));
-        transport.Routing().RouteToEndpoint(typeof(AddWebPushSubscriptionCommand), EndpointName);
-        transport.Routing().RouteToEndpoint(typeof(RemoveWebPushSubscriptionCommand), EndpointName);
-        transport.Routing().RouteToEndpoint(typeof(SendPushNotificationCommand), EndpointName);
-
-#endif
     })
     .Build();
 host.Run();

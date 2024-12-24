@@ -31,7 +31,6 @@ namespace SFA.DAS.PushNotifications.Application.UnitTests.Services
             _service = new PushNotificationsService(_applicationClientRepository.Object, _clientNotificationRepository.Object, _logger.Object, _configuration.Object);
         }
 
-
         [Test, MoqAutoData]
         public void Add_Web_Push_Notification_Subscription_Returns_Id(AddWebPushSubscriptionCommand message)
         {
@@ -55,7 +54,6 @@ namespace SFA.DAS.PushNotifications.Application.UnitTests.Services
             //Act & Assert
             Assert.DoesNotThrowAsync(async () => await _service.RemoveWebPushNotificationSubscription(message));
         }
-
 
         [Test, MoqAutoData]
         public void Add_Web_Push_Notification_Subscriptions_ThrowsException_OnEmptyEndpoint(AddWebPushSubscriptionCommand message)
@@ -142,7 +140,6 @@ namespace SFA.DAS.PushNotifications.Application.UnitTests.Services
                     It.IsAny<Exception>(),
                     It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)));
         }
-
 
         [Test, MoqAutoData]
         public void SendNotification_NoVapidKeys_ReturnsError(

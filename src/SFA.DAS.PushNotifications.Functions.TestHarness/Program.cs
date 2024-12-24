@@ -6,7 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: ExcludeFromCodeCoverage]
 namespace SFA.DAS.PushNotifications.Functions.TestHarness;
 
-
+[ExcludeFromCodeCoverage]
 internal static class Program
 {
     private const string EndpointName = "SFA.DAS.PushNotifications";
