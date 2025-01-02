@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SFA.DAS.PushNotifications.Messages.Commands;
 using SFA.DAS.PushNotifications.Model.Entities;
@@ -60,7 +61,9 @@ namespace SFA.DAS.PushNotifications.Data.Repositories
             var payload = JsonConvert.SerializeObject(new
             {
                 title = message.Title,
-                message = message.Body
+                message = message.Body,
+                url = "/Tasks"
+
             });
 
             return payload;

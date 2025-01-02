@@ -25,7 +25,7 @@ namespace SFA.DAS.PushNotifications.Functions
                     case ConsoleKey.A:
                         var testAdd1 = new AddWebPushSubscriptionCommand()
                         {
-                            ApprenticeId = Guid.NewGuid(),
+                            ApprenticeId = new Guid("43d6900f-ff56-480f-8c61-f17337e89fba"),
                             Endpoint = "a",
                             PublicKey = "b",
                             AuthenticationSecret = "c"
@@ -57,7 +57,7 @@ namespace SFA.DAS.PushNotifications.Functions
                     case ConsoleKey.C:
                         var testSend1 = new SendPushNotificationCommand()
                         {
-                            ApprenticeAccountIdentifier = Guid.NewGuid(),
+                            ApprenticeAccountIdentifier = new Guid("43d6900f-ff56-480f-8c61-f17337e89fba"),
                             Title = "Test Notification",
                             Body = "This is a test notification"
                         };
