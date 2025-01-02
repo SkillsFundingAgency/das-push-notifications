@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SFA.DAS.PushNotifications.Messages.Commands;
 using SFA.DAS.PushNotifications.Model.Entities;
@@ -15,11 +16,13 @@ namespace SFA.DAS.PushNotifications.Data.Repositories
     {
         private readonly IPushNotificationsDataContext _context;
         private readonly ILogger<ClientNotificationRepository> _logger;
+        private readonly IConfiguration _configuration;
 
-        public ClientNotificationRepository(IPushNotificationsDataContext context, ILogger<ClientNotificationRepository> logger)
+        public ClientNotificationRepository(IPushNotificationsDataContext context, ILogger<ClientNotificationRepository> logger, IConfiguration configuration)
         {
             _context = context;
             _logger = logger;
+            _configuration = configuration;
         }
 
         public async Task<ClientNotification> AddClientNotification(int applicationClientId, SendPushNotificationCommand message, CancellationToken cancellationToken)
@@ -55,12 +58,31 @@ namespace SFA.DAS.PushNotifications.Data.Repositories
             return clientNotification;
         }
 
+        private string GetUrl()
+        {
+            var environment = _configuration["EnvironmentName"].ToLower();
+
+            if (environment != "local")
+            {
+                if (environment == "prd")
+                {
+                    return "my-apprenticeship.apprenticeships.education.gov.uk";
+                }
+                return environment + "-apprentice-app.apprenticeships.education.gov.uk";
+            }
+            return "localhost:5003";
+        }
+
+       
         private string PayloadContents(SendPushNotificationCommand message)
         {
+           
             var payload = JsonConvert.SerializeObject(new
             {
                 title = message.Title,
-                message = message.Body
+                message = message.Body,
+                url = GetUrl()
+
             });
 
             return payload;
