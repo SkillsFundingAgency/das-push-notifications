@@ -92,7 +92,81 @@ namespace SFA.DAS.PushNotifications.Data.UnitTests.Repository
             mockContext.Verify(context => context.SaveChangesAsync(cancellationToken), Times.Once);
             logger.Verify(x => x.Log(LogLevel.Information, It.IsAny<EventId>(), It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Updating client notification for")), null, (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()));
             logger.Verify(x => x.Log(LogLevel.Information, It.IsAny<EventId>(), It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Updated client notification for")), null, (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()));
+        }
 
+        [Test, MoqAutoData]
+        public async Task Then_The_CorrectTasksUrl_IsReturned_ForLocal(
+            List<ClientNotification> clientNotifications,
+            [Frozen] Mock<IPushNotificationsDataContext> mockContext,
+            [Frozen] Mock<ILogger<ClientNotificationRepository>> logger,
+            [Frozen] Mock<IConfiguration> configuration,
+            ClientNotificationRepository repository,
+            ClientNotification clientNotification)
+        {
+            //Arrange
+            mockContext
+               .Setup(context => context.ClientNotification)
+               .ReturnsDbSet(clientNotifications);
+            clientNotification.Status = (int)ClientNotificationStatus.Success;
+            CancellationToken cancellationToken = CancellationToken.None;
+            configuration.Setup(x => x["EnvironmentName"]).Returns("LOCAL");
+
+            //Act
+            var result = repository.GetTasksUrl();
+
+            //Assert
+            result.Should().NotBeNullOrEmpty();
+            result.Should().Contain("local");
+        }
+
+        [Test, MoqAutoData]
+        public async Task Then_The_CorrectTasksUrl_IsReturned_ForProd(
+           List<ClientNotification> clientNotifications,
+           [Frozen] Mock<IPushNotificationsDataContext> mockContext,
+           [Frozen] Mock<ILogger<ClientNotificationRepository>> logger,
+           [Frozen] Mock<IConfiguration> configuration,
+           ClientNotificationRepository repository,
+           ClientNotification clientNotification)
+        {
+            //Arrange
+            mockContext
+               .Setup(context => context.ClientNotification)
+               .ReturnsDbSet(clientNotifications);
+            clientNotification.Status = (int)ClientNotificationStatus.Success;
+            CancellationToken cancellationToken = CancellationToken.None;
+            configuration.Setup(x => x["EnvironmentName"]).Returns("PRD");
+
+            //Act
+            var result = repository.GetTasksUrl();
+
+            //Assert
+            result.Should().NotBeNullOrEmpty();
+            result.Should().Contain("my-apprenticeship.apprenticeships.education.gov.uk/Tasks");
+        }
+
+        [Test, MoqAutoData]
+        public async Task Then_The_CorrectTasksUrl_IsReturned_ForNonProd(
+           List<ClientNotification> clientNotifications,
+           [Frozen] Mock<IPushNotificationsDataContext> mockContext,
+           [Frozen] Mock<ILogger<ClientNotificationRepository>> logger,
+           [Frozen] Mock<IConfiguration> configuration,
+           ClientNotificationRepository repository,
+           ClientNotification clientNotification)
+        {
+            //Arrange
+            mockContext
+               .Setup(context => context.ClientNotification)
+               .ReturnsDbSet(clientNotifications);
+            clientNotification.Status = (int)ClientNotificationStatus.Success;
+            CancellationToken cancellationToken = CancellationToken.None;
+            configuration.Setup(x => x["EnvironmentName"]).Returns("TEST");
+
+            //Act
+            var result = repository.GetTasksUrl();
+
+            //Assert
+            result.Should().NotBeNullOrEmpty();
+            result.Should().Contain("test-apprentice-app.apprenticeships.education.gov.uk/Tasks");
         }
     }
 }

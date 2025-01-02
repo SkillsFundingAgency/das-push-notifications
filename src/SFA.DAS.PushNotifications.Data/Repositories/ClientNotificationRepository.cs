@@ -58,7 +58,7 @@ namespace SFA.DAS.PushNotifications.Data.Repositories
             return clientNotification;
         }
 
-        private string GetTasksUrl()
+        public string GetTasksUrl()
         {
             var environment = _configuration["EnvironmentName"].ToLower();
 
