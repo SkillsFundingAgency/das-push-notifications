@@ -16,13 +16,11 @@ namespace SFA.DAS.PushNotifications.Data.Repositories
     {
         private readonly IPushNotificationsDataContext _context;
         private readonly ILogger<ClientNotificationRepository> _logger;
-        private readonly IConfiguration _configuration;
 
-        public ClientNotificationRepository(IPushNotificationsDataContext context, ILogger<ClientNotificationRepository> logger, IConfiguration configuration)
+        public ClientNotificationRepository(IPushNotificationsDataContext context, ILogger<ClientNotificationRepository> logger)
         {
             _context = context;
             _logger = logger;
-            _configuration = configuration;
         }
 
         public async Task<ClientNotification> AddClientNotification(int applicationClientId, SendPushNotificationCommand message, CancellationToken cancellationToken)
@@ -58,30 +56,13 @@ namespace SFA.DAS.PushNotifications.Data.Repositories
             return clientNotification;
         }
 
-        public string GetTasksUrl()
-        {
-            var environment = _configuration["EnvironmentName"].ToLower();
-
-            if (environment != "local")
-            {
-                if (environment == "prd")
-                {
-                    return "my-apprenticeship.apprenticeships.education.gov.uk/Tasks";
-                }
-                return environment + "-apprentice-app.apprenticeships.education.gov.uk/Tasks";
-            }
-            return "localhost:5003/Tasks";
-        }
-
-       
         private string PayloadContents(SendPushNotificationCommand message)
         {
-           
             var payload = JsonConvert.SerializeObject(new
             {
                 title = message.Title,
                 message = message.Body,
-                url = GetTasksUrl()
+                url = "/Tasks"
 
             });
 
