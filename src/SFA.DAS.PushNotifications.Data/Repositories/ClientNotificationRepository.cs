@@ -58,7 +58,7 @@ namespace SFA.DAS.PushNotifications.Data.Repositories
             return clientNotification;
         }
 
-        private string GetUrl()
+        private string GetTasksUrl()
         {
             var environment = _configuration["EnvironmentName"].ToLower();
 
@@ -66,11 +66,11 @@ namespace SFA.DAS.PushNotifications.Data.Repositories
             {
                 if (environment == "prd")
                 {
-                    return "my-apprenticeship.apprenticeships.education.gov.uk";
+                    return "my-apprenticeship.apprenticeships.education.gov.uk/Tasks";
                 }
-                return environment + "-apprentice-app.apprenticeships.education.gov.uk";
+                return environment + "-apprentice-app.apprenticeships.education.gov.uk/Tasks";
             }
-            return "localhost:5003";
+            return "localhost:5003/Tasks";
         }
 
        
@@ -81,7 +81,7 @@ namespace SFA.DAS.PushNotifications.Data.Repositories
             {
                 title = message.Title,
                 message = message.Body,
-                url = GetUrl()
+                url = GetTasksUrl()
 
             });
 

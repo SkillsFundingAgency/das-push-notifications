@@ -1,5 +1,6 @@
 ﻿using AutoFixture.NUnit3;
 using FluentAssertions;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
 using SFA.DAS.PushNotifications.Data.Repositories;
@@ -18,7 +19,8 @@ namespace SFA.DAS.PushNotifications.Data.UnitTests.Repository
             List<ClientNotification> clientNotification,
             [Frozen] Mock<IPushNotificationsDataContext> mockContext,
             [Frozen] Mock<ILogger<ClientNotificationRepository>> logger,
-            ClientNotificationRepository repository,
+            [Frozen] Mock<IConfiguration> configuration,
+        ClientNotificationRepository repository,
             SendPushNotificationCommand message)
         {
             //Arrange
@@ -28,6 +30,7 @@ namespace SFA.DAS.PushNotifications.Data.UnitTests.Repository
 
             CancellationToken cancellationToken = CancellationToken.None;
             int applicationClientId = 1;
+            configuration.Setup(x => x["EnvironmentName"]).Returns("LOCAL");
 
             //Act
             await repository.AddClientNotification(applicationClientId, message, cancellationToken);
