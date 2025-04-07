@@ -89,6 +89,19 @@
         },
         "serviceBusConnectionString": {
             "type": "securestring"
+        },
+        "EnableRouteTableAssociation": {
+            "type": "bool",
+            "defaultValue": false,
+            "metadata": {
+                "description": "Determines whether to enable route table association on subnet"
+            }
+        },
+        "SharedRouteTableName": {
+            "type": "string",
+            "metadata": {
+                "description": "Determines whether to enable route table association on subnet"
+            }
         }
     },
     "variables": {
@@ -98,7 +111,11 @@
         "functionAppName": "[concat(variables('resourceNamePrefix'), '-fa')]",
         "databaseName": "[concat(variables('resourceNamePrefix'), '-db')]",
         "appServicePlanName": "[concat(variables('resourceNamePrefix'), '-asp')]",
-        "configNames": "SFA.DAS.PushNotifications"
+        "configNames": "SFA.DAS.PushNotifications",
+        "routeTableId": {
+            "id": "[resourceId(subscription().subscriptionId, parameters('sharedEnvResourceGroup'), 'Microsoft.Network/routeTables', parameters('SharedRouteTableName'))]"
+        },
+        "emptyObject": {}
     },
     "resources": [
         {
@@ -135,6 +152,9 @@
                     },
                     "delegations": {
                         "value": "[parameters('subnetDelegations')]"
+                    },
+                    "routeTable": {
+                        "value": "[if(parameters('enableRouteTableAssociation'), variables('routeTableId') , variables('emptyObject'))]"
                     }
                 }
             },
@@ -267,8 +287,8 @@
                                     "value": "~4"
                                 },
                                 {
-                                  "name": "FUNCTIONS_WORKER_RUNTIME",
-                                  "value": "dotnet-isolated"
+                                    "name": "FUNCTIONS_WORKER_RUNTIME",
+                                    "value": "dotnet-isolated"
                                 },
                                 {
                                     "name": "WEBSITE_RUN_FROM_PACKAGE",
