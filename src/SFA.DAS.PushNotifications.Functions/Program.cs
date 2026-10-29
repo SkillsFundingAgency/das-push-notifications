@@ -10,9 +10,9 @@ using SFA.DAS.PushNotifications.Data.Extensions;
 using SFA.DAS.PushNotifications.Data.Repositories;
 using SFA.DAS.PushNotifications.Functions.StartupExtensions;
 
-[assembly: NServiceBusTriggerFunction("SFA.DAS.LearnerNotifications.LearnerNotificationService")]
+[assembly: NServiceBusTriggerFunction("SFA.DAS.PushNotifications")]
 
-const string EndpointName = "SFA.DAS.LearnerNotifications.LearnerNotificationService";
+const string EndpointName = "SFA.DAS.PushNotifications";
 const string ErrorEndpointName = $"{EndpointName}-error";
 
 var host = new HostBuilder()
