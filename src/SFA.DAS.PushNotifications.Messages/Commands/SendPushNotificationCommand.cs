@@ -5,6 +5,6 @@
         public Guid ApprenticeAccountIdentifier { get; set; }
         public string Title { get; set; } = null!;
         public string Body { get; set; } = null!;
-        public string Link { get; set; } = null!;
+        public string Url { get; set; } = null!;
     }
 }
