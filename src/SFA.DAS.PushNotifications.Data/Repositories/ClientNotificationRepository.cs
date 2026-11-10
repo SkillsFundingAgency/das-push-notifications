@@ -62,8 +62,7 @@ namespace SFA.DAS.PushNotifications.Data.Repositories
             {
                 title = message.Title,
                 message = message.Body,
-                url = "/Tasks"
-
+                url = message.Url
             });
 
             return payload;
