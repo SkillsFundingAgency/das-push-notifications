@@ -32,11 +32,12 @@ internal static class Program
             .DefiningEventsAs(t => t.Namespace != null && t.Namespace.EndsWith("Events"));
         endpointConfiguration.SendOnly();
 
-        var transport = endpointConfiguration.UseTransport<AzureServiceBusTransport>();
-        transport.Routing().RouteToEndpoint(typeof(SendPushNotificationCommand), EndpointName);
         var connectionString = config["Values:AzureWebJobsServiceBus"];
-        transport.ConnectionString(connectionString);
-        var routing = transport.Routing();
+        // Send-only endpoint sending commands directly to the endpoint queue, so the topic topology is not used.
+        var transport = new AzureServiceBusTransport(connectionString!, TopicTopology.Default);
+#pragma warning disable NSBWFUNC009 // This console harness is a standalone sender, not a function endpoint.
+        var routing = endpointConfiguration.UseTransport(transport);
+#pragma warning restore NSBWFUNC009
 
         routing.RouteToEndpoint(typeof(AddWebPushSubscriptionCommand), EndpointName);
         routing.RouteToEndpoint(typeof(RemoveWebPushSubscriptionCommand), EndpointName);
